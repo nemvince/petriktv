@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
+
+@font-face {
+    font-family: 'Host Grotesk';
+    src: url('./assets/font/HostGrotesk-VariableFont_wght.ttf') format('truetype');
+}
+
+body, #root, :root {
+    height: 100%;
+}
+
+main {
+    zoom: 200%;
+    font-family: 'Host Grotesk', sans-serif;
+}
