@@ -20,14 +20,6 @@ main {
     @apply rounded-lg shadow-lg bg-black bg-opacity-30;
 }
 
-tbody tr:last-child {
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.15) 0%,
-      rgba(0, 0, 0, 0) 100%
-    );
-}
-
 .text-shadow {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 }

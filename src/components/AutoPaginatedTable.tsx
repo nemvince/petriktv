@@ -6,7 +6,7 @@ type AutoPaginatedTableProps = {
   tableHeight?: number;
   header: {
     title?: string;
-    icon: ReactElement;
+    icon?: ReactElement;
     center?: boolean;
     addClasses?: string;
   }[];
@@ -28,13 +28,19 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
   const rowRefs = useRef<(HTMLTableRowElement | null)[]>([]);
 
   const calculateItemsPerPage = () => {
-    if (!tableRef.current) return props.data.length;
+    if (!tableRef.current) {
+      console.warn("Table ref not set!");
+      return props.data.length;
+    };
 
     const validRowRefs = rowRefs.current.filter((ref) => ref !== null);
-    if (validRowRefs.length === 0) return props.data.length;
+    if (validRowRefs.length === 0) {
+      console.warn("No valid row refs found!");
+      return props.data.length;
+    }
 
     const tableHeight = props.tableHeight || 500;
-    const headerHeight = 50; // Estimate header height
+    const headerHeight = 65;
     const availableHeight = tableHeight - headerHeight;
 
     let totalHeight = 0;
@@ -91,7 +97,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
   }, [currentPage, totalPages, props.cycleInterval]);
 
   return (
-    <div className="relative">
+    <div className="h-full border border-petrik-3 rounded-lg">
       <div
         ref={tableRef}
         className="w-full overflow-hidden"
@@ -106,12 +112,12 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
               {props.header.map((header, index) => (
                 <th
                   key={index}
-                  className={`px-2 py-1 font-semibold
+                  className={`px-2 py-1 font-semibold [&:not(:first-child)]:border-l border-petrik-3
                     ${header.center ? "text-center" : "text-left"}
                     ${header.addClasses || ""}
                     `}
                 >
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-center gap-1">
                     {header.icon}
                     {header.title}
                   </div>
@@ -126,14 +132,14 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
                 ref={(el) => {
                   rowRefs.current[index] = el;
                 }}
-                className={`bg-black ${index % 2 == 0 ? "bg-opacity-10" : "bg-opacity-15"}`}
+                className={`bg-black border-b border-petrik-3 last:border-opacity-80 ${index % 2 == 0 ? "bg-opacity-20" : "bg-opacity-0"}`}
               >
-                <td className="text-left pl-2.5">{item.lesson}.</td>
-                <td>{item.teacher}</td>
-                <td>{item.missing}</td>
-                <td>{item.className}</td>
-                <td>{item.classroom}</td>
-                <td className="flex justify-center items-center h-full text-emerald-300 text-shadow">
+                <td className="text-center border-r border-petrik-3">{item.lesson}.</td>
+                <td className="text-center border-l border-petrik-3">{item.teacher}</td>
+                <td className="text-center border-l border-petrik-3">{item.missing}</td>
+                <td className="text-center border-l border-petrik-3">{item.className}</td>
+                <td className="text-center border-l border-petrik-3">{item.classroom}</td>
+                <td className="flex -ml-[0.5px] justify-center items-center text-emerald-300 text-shadow border-l h-full border-petrik-3">
                   {item.consolidated ? <Icon icon="mdi:check" /> : ""}
                 </td>
               </tr>
@@ -141,7 +147,6 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
           </tbody>
         </table>
       </div>
-      {/* Page indicator */}
       {totalPages > 1 && (
         <div className="text-center mt-1 font-bold">
           {currentPage + 1}/{totalPages}
