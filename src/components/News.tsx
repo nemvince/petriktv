@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Icon } from "@iconify/react";
 import axios from "axios";
+import Marquee from "react-fast-marquee";
 
 const News = () => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["substitutions"],
+    queryKey: ["news"],
     queryFn: async () => {
       const response = await axios.get(
         "https://helyettesites.petrik.hu/api/",
@@ -14,20 +15,22 @@ const News = () => {
           },
         },
       );
+
       if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
 
-      const respData = response.data;
+      console.log(response.data);
 
-      if (respData === "empty") {
-        return [];
+      // data might be plaintext, so we need to parse it
+      if (typeof response.data === "string") {
+        return []
+      } else {
+        return response.data;
       }
-
-      return respData;
       
     },
-    refetchInterval: 60000,
+    refetchInterval: 120000,
   });
 
   if (isLoading) {
@@ -48,11 +51,9 @@ const News = () => {
     );
   }
 
-  return (
-    <span className="font-bold text-lg">
-      {data.length > 0 ? data[0].alert : "Nincs hír"}
-    </span>
-  );
+  console.log(data);
+
+  return data.length > 0 ? <Marquee className="py-0.5 px-2">{data[0].alert}</Marquee>: null;
 };
 
 export default News;

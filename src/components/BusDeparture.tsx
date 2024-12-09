@@ -164,8 +164,6 @@ const BusDeparture = (props: BusDepartureProps) => {
     );
   }
 
-  console.log(data);
-
   return <DepartureCard data={data} displayName={props.displayName} />;
 };
 
