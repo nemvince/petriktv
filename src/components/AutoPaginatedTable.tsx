@@ -5,12 +5,13 @@ type AutoPaginatedTableProps = {
   cycleInterval?: number;
   tableHeight?: number;
   header: {
-    title: string;
-    center?: boolean;
+    title?: string;
     icon: ReactElement;
+    center?: boolean;
+    addClasses?: string;
   }[];
   data: {
-    lesson: number;
+    lesson: string | number;
     teacher: string;
     missing: string;
     className: string;
@@ -33,7 +34,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
     if (validRowRefs.length === 0) return props.data.length;
 
     const tableHeight = props.tableHeight || 500;
-    const headerHeight = 40; // Estimate header height
+    const headerHeight = 50; // Estimate header height
     const availableHeight = tableHeight - headerHeight;
 
     let totalHeight = 0;
@@ -42,12 +43,12 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
     for (const row of validRowRefs) {
       if (row) {
         totalHeight += row.offsetHeight;
-        if (totalHeight > availableHeight) break;
+        if (totalHeight >= availableHeight) break;
         calculatedItemsPerPage++;
       }
     }
 
-    return Math.max(Math.min(calculatedItemsPerPage, props.data.length), 10); // Ensure minimum of 10 rows
+    return Math.min(calculatedItemsPerPage, props.data.length); // Ensure no overflow
   };
 
   useEffect(() => {
@@ -105,11 +106,12 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
               {props.header.map((header, index) => (
                 <th
                   key={index}
-                  className={`px-2 py-1 text-left font-semibold ${
-                    header.center ? "text-center" : ""
-                  }`}
+                  className={`px-2 py-1 font-semibold
+                    ${header.center ? "text-center" : "text-left"}
+                    ${header.addClasses || ""}
+                    `}
                 >
-                  <div className="flex items-center gap-0.5 md:gap-2">
+                  <div className="flex items-center gap-1">
                     {header.icon}
                     {header.title}
                   </div>
@@ -117,7 +119,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="table-auto">
             {getCurrentPageData().map((item, index) => (
               <tr
                 key={index}
@@ -126,7 +128,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
                 }}
                 className={`bg-black ${index % 2 == 0 ? "bg-opacity-10" : "bg-opacity-15"}`}
               >
-                <td className="text-center">{item.lesson}.</td>
+                <td className="text-left pl-2.5">{item.lesson}.</td>
                 <td>{item.teacher}</td>
                 <td>{item.missing}</td>
                 <td>{item.className}</td>

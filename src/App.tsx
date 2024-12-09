@@ -29,7 +29,7 @@ function App() {
             <Icon icon="ic:baseline-tv" className="text-2xl" />
             <span>
               PetrikTV
-              <span className="text-sm font-light self-end">v1.0</span>
+              <span className="text-sm font-light self-end">redux</span>
             </span>
           </span>
         </div>
@@ -60,7 +60,7 @@ function App() {
       </div>
 
       <div className="m-1.5 p-1 px-2.5 rounded-lg shadow-lg bg-black bg-opacity-30 flex flex-row justify-between">
-        <span className="font-bold text-lg">Boldi nigger Bottom bar Huba</span>
+        <span className="font-bold text-lg animate-pulse">Bottom text </span>
       </div>
     </main>
   );
