@@ -1,36 +1,23 @@
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import AutoPaginatedTable from "./AutoPaginatedTable";
 import { Icon } from "@iconify/react";
-
-const queryClient = new QueryClient();
+import axios from "axios";
 
 const Substitutions = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <SubstitutionsInternal />
-    </QueryClientProvider>
-  );
-};
-
-const SubstitutionsInternal = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["substitutions"],
     queryFn: async () => {
-      const response = await fetch(
-        "https://helyettesites.petrik.hu/api/?status=napihely",
+      const response = await axios.get(
+        "https://helyettesites.petrik.hu/api/",
+        { params: {
+          status: "napihely"
+        } },
       );
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
 
-      const respData = await response.json();
-
-      const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-      // await delay(5000);
+      const respData = response.data;
 
       type Substitution = {
         lesson: string | number;

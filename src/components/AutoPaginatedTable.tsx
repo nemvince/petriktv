@@ -134,7 +134,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
                 }}
                 className={`bg-black border-b border-petrik-3 last:border-opacity-80 ${index % 2 == 0 ? "bg-opacity-20" : "bg-opacity-0"}`}
               >
-                <td className="text-center border-r border-petrik-3">{item.lesson}.</td>
+                <td className="text-center font-bold border-r border-petrik-3">{item.lesson}.</td>
                 <td className="text-center border-l border-petrik-3">{item.teacher}</td>
                 <td className="text-center border-l border-petrik-3">{item.missing}</td>
                 <td className="text-center border-l border-petrik-3">{item.className}</td>
@@ -148,8 +148,13 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
         </table>
       </div>
       {totalPages > 1 && (
-        <div className="text-center mt-1 font-bold">
+        <div className="mt-2 justify-between mx-4 items-center flex">
+          <span className="font-bold">
           {currentPage + 1}/{totalPages}
+          </span>
+          <span>
+            Ma {props.data.length} óra van helyettesítve.
+          </span>
         </div>
       )}
     </div>
