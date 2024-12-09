@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import { ReactElement, useEffect, useRef, useState } from "react";
+import AnimatedPlaceholder from "./Placeholder";
 
 type AutoPaginatedTableProps = {
   cycleInterval?: number;
@@ -95,6 +96,12 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
       }
     };
   }, [currentPage, totalPages, props.cycleInterval]);
+
+  if (props.data.length === 0) {
+    return <div className="h-full w-full justify-center items-center flex flex-col">
+      <AnimatedPlaceholder title="Nincs helyettesítés!" />
+    </div>;
+  }
 
   return (
     <div className="h-full border border-petrik-3 rounded-lg">

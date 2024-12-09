@@ -7,6 +7,7 @@ import Substitutions from "./components/Substitutions";
 import "./App.css";
 import BusDeparture from "./components/BusDeparture";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import News from "./components/News";
 
 dayjs.locale(hu);
 dayjs.extend(relativeTime);
@@ -30,7 +31,7 @@ function App() {
         <div className="box m-1.5 p-1 px-2.5 flex flex-row justify-between">
           <div>
             <span className="font-bold text-lg flex gap-1 items-center">
-              <Icon icon="ic:baseline-tv" className="text-2xl" />
+              <Icon icon="pepicons-print:television" className="text-2xl" />
               <span>
                 PetrikTV
                 <span className="text-sm font-light self-end">redux</span>
@@ -63,8 +64,8 @@ function App() {
           </div>
         </div>
 
-        <div className="m-1.5 p-1 px-2.5 rounded-lg shadow-lg bg-black bg-opacity-30 flex flex-row justify-between">
-          <span className="font-bold text-lg animate-pulse">Bottom text</span>
+        <div className="m-1.5 px-2 box">
+          <News />
         </div>
       </main>
     </QueryClientProvider>
