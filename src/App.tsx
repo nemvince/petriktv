@@ -5,6 +5,7 @@ import hu from "dayjs/locale/hu";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Substitutions from "./components/Substitutions";
 import "./App.css";
+import BusDeparture from "./components/BusDeparture";
 
 dayjs.locale(hu);
 dayjs.extend(relativeTime);
@@ -24,8 +25,13 @@ function App() {
     <main className="h-full bg-gradient-to-br from-petrik-1 to-petrik-2 text-stone-100 flex flex-col">
       <div className="box m-1.5 p-1 px-2.5 flex flex-row justify-between">
         <div>
-          <span className="font-bold text-lg">PetrikTV</span>
-          <span className="text-sm">v1.0</span>
+          <span className="font-bold text-lg flex gap-1 items-center">
+            <Icon icon="ic:baseline-tv" className="text-2xl" />
+            <span>
+              PetrikTV
+              <span className="text-sm font-light self-end">v1.0</span>
+            </span>
+          </span>
         </div>
         <div className="flex gap-1 items-center">
           <span className="">{clockText[0]}</span>
@@ -49,7 +55,7 @@ function App() {
         </div>
 
         <div className="col-span-2 box">
-        {Substitutions}
+          <Substitutions />
         </div>
       </div>
 
@@ -59,38 +65,5 @@ function App() {
     </main>
   );
 }
-
-const BusDeparture = () => {
-  const [timeLeft, setTimeLeft] = useState("");
-
-  // date 2 minutes into future
-  const departureTime = new Date(Date.now());
-  departureTime.setMinutes(departureTime.getMinutes() + 2);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = dayjs();
-      const timeLeft = dayjs(departureTime).diff(now, "minute");
-      setTimeLeft(timeLeft > 0 ? `${timeLeft}'` : "Indul!");
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex justify-between items-center ml-1 mr-2">
-      <div className="flex gap-1">
-        <div className="flex gap-1 items-center h-6 bg-cyan-600 pl-1 pr-1.5 rounded-full">
-          <Icon
-            icon="mdi:bus"
-            className="text-xl p-0.5 rounded-full bg-white text-cyan-600"
-          />
-          <span className="font-bold">123E</span>
-        </div>
-        <h2 className="self-center">Keleti felé</h2>
-      </div>
-      <span className="font-bold">{timeLeft}</span>
-    </div>
-  );
-};
 
 export default App;

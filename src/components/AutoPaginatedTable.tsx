@@ -124,16 +124,14 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
                 ref={(el) => {
                   rowRefs.current[index] = el;
                 }}
-                className={`bg-black bg-opacity-${
-                  index % 2 === 0 ? "30" : "20"
-                }`}
+                className={`bg-black ${index % 2 == 0 ? "bg-opacity-10" : "bg-opacity-15"}`}
               >
                 <td className="text-center">{item.lesson}.</td>
                 <td>{item.teacher}</td>
                 <td>{item.missing}</td>
                 <td>{item.className}</td>
                 <td>{item.classroom}</td>
-                <td className="text-center">
+                <td className="flex justify-center items-center h-full text-emerald-300 text-shadow">
                   {item.consolidated ? <Icon icon="mdi:check" /> : ""}
                 </td>
               </tr>
