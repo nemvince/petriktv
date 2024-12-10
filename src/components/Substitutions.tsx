@@ -145,22 +145,33 @@ const Substitutions = () => {
       // Consolidate entries
       const consolidatedData: Substitution[] = Object.values(groupedData).map(
         (group) => {
-          // Sort lessons to ensure correct order
-          const sortedLessons = group.map((g) => g.lesson).sort((
-            a: any,
-            b: any,
-          ) => a - b);
+          // Check if all lessons have the same classroom and teacher
+          const sameClassroom = group.every((g) => g.classroom === group[0].classroom);
+          const sameTeacher = group.every((g) => g.teacher === group[0].teacher);
 
-          // Create a consolidated entry
-          return {
-            ...group[0],
-            lesson: sortedLessons.length > 1
-              ? `${sortedLessons[0]}-${sortedLessons[sortedLessons.length - 1]}`
-              : sortedLessons[0],
-            consolidated: true,
-          };
+          if (sameClassroom && sameTeacher) {
+        // Sort lessons to ensure correct order
+        const sortedLessons = group.map((g) => g.lesson).sort((
+          a: any,
+          b: any,
+        ) => a - b);
+
+        // TODO: remove entries in the past
+
+        // Create a consolidated entry
+        return {
+          ...group[0],
+          lesson: sortedLessons.length > 1
+            ? `${sortedLessons[0]}-${sortedLessons[sortedLessons.length - 1]}`
+            : sortedLessons[0],
+          consolidated: true,
+        };
+          } else {
+        // If not all lessons have the same classroom and teacher, return the group as is
+        return group;
+          }
         },
-      );
+      ).flat();
 
       // get rid of entries in the past
       const now = dayjs();
@@ -169,9 +180,9 @@ const Substitutions = () => {
         return now.isBefore(start);
       });
 
-      if (!nextPeriod) {
-        return [];
-      }
+      // if (!nextPeriod) {
+      //   return [];
+      // }
 
       // Sort the consolidated data by lesson
       return consolidatedData.sort((a, b) => {
@@ -184,12 +195,8 @@ const Substitutions = () => {
           : b.lesson;
 
         return lessonA - lessonB;
-      }).filter((item) => {
-        const lesson = typeof item.lesson === "string"
-          ? parseInt(item.lesson.split("-")[0])
-          : item.lesson;
-        return lesson >= nextPeriod.period;
-      });
+      })
+      
     },
     refetchInterval: 60000,
   });
@@ -223,7 +230,7 @@ const Substitutions = () => {
         { title: "ÖVH", addClasses: "font-bold text-sm" },
       ]}
       data={data || []}
-      tableHeight={400}
+      tableHeight={440}
       cycleInterval={5000}
     />
   );
