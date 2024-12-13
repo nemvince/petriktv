@@ -20,8 +20,6 @@ const News = () => {
         throw new Error("Network response was not ok");
       }
 
-      console.log(response.data);
-
       // data might be plaintext, so we need to parse it
       if (typeof response.data === "string") {
         return []
@@ -50,8 +48,6 @@ const News = () => {
       </div>
     );
   }
-
-  console.log(data);
 
   return data.length > 0 ? <Marquee className="py-0.5 px-2">{data[0].alert}</Marquee>: null;
 };
