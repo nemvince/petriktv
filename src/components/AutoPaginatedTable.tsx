@@ -1,27 +1,25 @@
-import { Icon } from "@iconify/react";
 import { ReactElement, useEffect, useRef, useState } from "react";
 import AnimatedPlaceholder from "./Placeholder";
 
-type AutoPaginatedTableProps = {
-  cycleInterval?: number;
-  tableHeight?: number;
-  header: {
-    title?: string;
-    icon?: ReactElement;
-    center?: boolean;
-    addClasses?: string;
-  }[];
-  data: {
-    lesson: string | number;
-    teacher: string;
-    missing: string;
-    className: string;
-    classroom: string;
-    consolidated: boolean;
-  }[];
+type HeaderConfig<T> = {
+  title?: string;
+  icon?: ReactElement;
+  center?: boolean;
+  addClasses?: string;
+  key: keyof T;
+  render?: (value: any) => ReactElement | string;
 };
 
-const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
+type AutoPaginatedTableProps<T> = {
+  cycleInterval?: number;
+  tableHeight?: number;
+  header: HeaderConfig<T>[];
+  data: T[];
+  emptyStateMessage?: string;
+  keyExtractor?: (item: T, index: number) => string | number;
+};
+
+function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(props.data.length);
   const cycleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -32,7 +30,7 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
     if (!tableRef.current) {
       console.warn("Table ref not set!");
       return props.data.length;
-    };
+    }
 
     const validRowRefs = rowRefs.current.filter((ref) => ref !== null);
     if (validRowRefs.length === 0) {
@@ -55,14 +53,14 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
       }
     }
 
-    return Math.min(calculatedItemsPerPage, props.data.length); // Ensure no overflow
+    return Math.min(calculatedItemsPerPage, props.data.length);
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const calculatedItemsPerPage = calculateItemsPerPage();
       setItemsPerPage(calculatedItemsPerPage);
-    }, 50); // Longer delay to ensure proper rendering
+    }, 50);
 
     return () => clearTimeout(timer);
   }, [props.data, props.tableHeight]);
@@ -97,10 +95,17 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
     };
   }, [currentPage, totalPages, props.cycleInterval]);
 
+  // Default key extractor if not provided
+  const getKey = props.keyExtractor || ((_: T, index: number) => index);
+
   if (props.data.length === 0) {
-    return <div className="h-full w-full justify-center items-center flex flex-col">
-      <AnimatedPlaceholder title="Nincs helyettesítés!" />
-    </div>;
+    return (
+      <div className="h-full w-full justify-center items-center flex flex-col">
+        <AnimatedPlaceholder 
+          title={props.emptyStateMessage || "No data available!"} 
+        />
+      </div>
+    );
   }
 
   return (
@@ -135,20 +140,23 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
           <tbody className="table-auto">
             {getCurrentPageData().map((item, index) => (
               <tr
-                key={index}
+                key={getKey(item, index)}
                 ref={(el) => {
                   rowRefs.current[index] = el;
                 }}
                 className={`bg-black border-b border-petrik-3 last:border-opacity-80 ${index % 2 == 0 ? "bg-opacity-20" : "bg-opacity-0"}`}
               >
-                <td className="text-center font-bold border-r border-petrik-3">{item.lesson}.</td>
-                <td className="text-center border-l border-petrik-3">{item.teacher}</td>
-                <td className="text-center border-l border-petrik-3">{item.missing}</td>
-                <td className="text-center border-l border-petrik-3">{item.className}</td>
-                <td className="text-center border-l border-petrik-3">{item.classroom}</td>
-                <td className="flex -ml-[0.5px] justify-center items-center text-emerald-300 text-shadow border-l h-full border-petrik-3">
-                  {item.consolidated ? <Icon icon="mdi:check" /> : ""}
-                </td>
+                {props.header.map((header, colIndex) => (
+                  <td 
+                    key={colIndex}
+                    className={`text-center border-l border-petrik-3 
+                      ${colIndex === 0 ? 'font-bold border-r' : ''}`}
+                  >
+                    {header.render 
+                      ? header.render(item[header.key]) 
+                      : String(item[header.key])}
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>
@@ -157,15 +165,15 @@ const AutoPaginatedTable = (props: AutoPaginatedTableProps) => {
       {totalPages > 1 && (
         <div className="mt-2 justify-between mx-4 items-center flex">
           <span className="font-bold">
-          {currentPage + 1}/{totalPages}
+            {currentPage + 1}/{totalPages}
           </span>
           <span>
-            Ma {props.data.length} óra van helyettesítve.
+            Összesen: {props.data.length}
           </span>
         </div>
       )}
     </div>
   );
-};
+}
 
 export default AutoPaginatedTable;

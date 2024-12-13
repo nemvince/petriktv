@@ -3,94 +3,7 @@ import AutoPaginatedTable from "./AutoPaginatedTable";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import dayjs from "dayjs";
-
-const periods = [
-  {
-    period: 0,
-    starttime: "7:10",
-    endtime: "7:55",
-  },
-  {
-    period: 1,
-    starttime: "8:00",
-    endtime: "8:45",
-  },
-  {
-    period: 2,
-    starttime: "8:55",
-    endtime: "9:40",
-  },
-  {
-    period: 3,
-    starttime: "9:55",
-    endtime: "10:40",
-  },
-  {
-    period: 4,
-    starttime: "10:50",
-    endtime: "11:35",
-  },
-  {
-    period: 5,
-    starttime: "11:45",
-    endtime: "12:30",
-  },
-  {
-    period: 6,
-    starttime: "12:50",
-    endtime: "13:35",
-  },
-  {
-    period: 7,
-    starttime: "13:45",
-    endtime: "14:30",
-  },
-  {
-    period: 8,
-    starttime: "14:35",
-    endtime: "15:20",
-  },
-  {
-    period: 9,
-    starttime: "15:20",
-    endtime: "16:00",
-  },
-  {
-    period: 10,
-    starttime: "16:00",
-    endtime: "16:40",
-  },
-  {
-    period: 11,
-    starttime: "16:45",
-    endtime: "17:25",
-  },
-  {
-    period: 12,
-    starttime: "17:30",
-    endtime: "18:10",
-  },
-  {
-    period: 13,
-    starttime: "18:15",
-    endtime: "18:55",
-  },
-  {
-    period: 14,
-    starttime: "19:00",
-    endtime: "19:40",
-  },
-  {
-    period: 15,
-    starttime: "19:45",
-    endtime: "20:25",
-  },
-  {
-    period: 16,
-    starttime: "20:30",
-    endtime: "21:10",
-  },
-];
+import periods from "../helpers/periods";
 
 const Substitutions = () => {
   const { data, isLoading, error } = useQuery({
@@ -156,7 +69,7 @@ const Substitutions = () => {
           b: any,
         ) => a - b);
 
-        // TODO: remove entries in the past
+        // TODO: remove entries in the pastP
 
         // Create a consolidated entry
         return {
@@ -175,6 +88,7 @@ const Substitutions = () => {
 
       // get rid of entries in the past
       const now = dayjs();
+
       const nextPeriod = periods.find((period) => {
         const start = dayjs(period.starttime, "HH:mm");
         return now.isBefore(start);
@@ -222,12 +136,12 @@ const Substitutions = () => {
   return (
     <AutoPaginatedTable
       header={[
-        { icon: <Icon icon="mdi:clock" />, addClasses: "w-12", center: true },
-        { title: "Tanár", icon: <Icon icon="mdi:account" /> },
-        { title: "Helyettes", icon: <Icon icon="mdi:account-group" /> },
-        { title: "Osztály", icon: <Icon icon="mdi:school" /> },
-        { title: "Terem", icon: <Icon icon="mdi:location" /> },
-        { title: "ÖVH", addClasses: "font-bold text-sm" },
+        { icon: <Icon icon="mdi:clock" />, addClasses: "w-12", center: true, key: "lesson" },
+        { title: "Tanár", icon: <Icon icon="mdi:account" />, key: "teacher" },
+        { title: "Helyettes", icon: <Icon icon="mdi:account-group" />, key: "missing" },
+        { title: "Osztály", icon: <Icon icon="mdi:school" />, key: "className" },
+        { title: "Terem", icon: <Icon icon="mdi:location" />, key: "classroom" },
+        { title: "ÖVH", addClasses: "font-bold text-sm", key: "consolidated" },
       ]}
       data={data || []}
       tableHeight={440}
