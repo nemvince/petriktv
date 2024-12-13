@@ -49,7 +49,7 @@ const Weather = () => {
     <div className="h-full flex flex-row justify-between items-center p-3">
       <div className="flex justify-center items-center">
         <img src={data.current.condition.icon} className="h-20 w-20" />   
-        <span className="self-center text-xl">{data.current.temp_c} °C</span> 
+        <span className="self-center text-xl font-bold">{data.current.temp_c} °C</span> 
       </div>
       <div className="flex flex-col justify-center items-center gap-2">
         <div className="flex gap-2">

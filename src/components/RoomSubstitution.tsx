@@ -9,7 +9,6 @@ type RoomSubstitutionEntry = {
   class: string;
 };
 
-
 const RoomSubstitution = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["roomSubstitution"],
@@ -72,9 +71,10 @@ const RoomSubstitution = () => {
       data={data || []}
       header={[
         {
-          title: "Óra",
-          key: "lesson",
+          icon: <Icon icon="mdi:clock" />,
+          addClasses: "w-12",
           center: true,
+          key: "lesson",
         },
         {
           title: "Honnan",
@@ -91,8 +91,10 @@ const RoomSubstitution = () => {
           key: "class",
         },
       ]}
+      emptyStateMessage="Nincs teremcsere!"
       cycleInterval={5000}
       tableHeight={197}
+      headerHeight={10}
     />
   );
 };

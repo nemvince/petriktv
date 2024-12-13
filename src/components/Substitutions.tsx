@@ -143,6 +143,7 @@ const Substitutions = () => {
         { title: "Terem", icon: <Icon icon="mdi:location" />, key: "classroom" },
         { title: "ÖVH", addClasses: "font-bold text-sm", key: "consolidated" },
       ]}
+      emptyStateMessage="Nincs helyettesítés!"
       data={data || []}
       tableHeight={440}
       cycleInterval={5000}

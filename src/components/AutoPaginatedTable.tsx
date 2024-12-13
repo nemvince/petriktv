@@ -13,6 +13,7 @@ type HeaderConfig<T> = {
 type AutoPaginatedTableProps<T> = {
   cycleInterval?: number;
   tableHeight?: number;
+  headerHeight?: number;
   header: HeaderConfig<T>[];
   data: T[];
   emptyStateMessage?: string;
@@ -39,7 +40,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     }
 
     const tableHeight = props.tableHeight || 500;
-    const headerHeight = 65;
+    const headerHeight = props.headerHeight || 65;
     const availableHeight = tableHeight - headerHeight;
 
     let totalHeight = 0;
@@ -102,7 +103,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     return (
       <div className="h-full w-full justify-center items-center flex flex-col">
         <AnimatedPlaceholder 
-          title={props.emptyStateMessage || "No data available!"} 
+          title={props.emptyStateMessage || "Nincs adat!"} 
         />
       </div>
     );
@@ -162,16 +163,17 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
           </tbody>
         </table>
       </div>
+      <div className="mt-2 justify-between mx-4 items-center flex">
+      <span>
+            Összesen: {props.data.length}
+          </span>
       {totalPages > 1 && (
-        <div className="mt-2 justify-between mx-4 items-center flex">
           <span className="font-bold">
             {currentPage + 1}/{totalPages}
           </span>
-          <span>
-            Összesen: {props.data.length}
-          </span>
-        </div>
+          
       )}
+      </div>
     </div>
   );
 }
