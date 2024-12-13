@@ -150,9 +150,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
                 {props.header.map((header, colIndex) => (
                   <td 
                     key={colIndex}
-                    className={`text-center border-l border-petrik-3 
-                      ${colIndex === 0 ? 'font-bold border-r' : ''}`}
-                  >
+                    className="text-center [&:not(:first-child)]:border-l border-petrik-3">
                     {header.render 
                       ? header.render(item[header.key]) 
                       : String(item[header.key])}
