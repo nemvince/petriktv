@@ -12,6 +12,7 @@ import Weather from "./components/Weather";
 import RoomSubstitution from "./components/RoomSubstitution";
 import { check } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
+import { getVersion } from "@tauri-apps/api/app";
 
 dayjs.locale(hu);
 dayjs.extend(relativeTime);
@@ -68,6 +69,17 @@ function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  const getAppVersion = async () => {
+    const version = await getVersion();
+    return version;
+  }
+
+  const [appVersion, setAppVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAppVersion().then(setAppVersion);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <main className="h-full py-2 bg-gradient-to-br from-petrik-1 to-petrik-2 text-stone-100 flex flex-col">
@@ -77,7 +89,7 @@ function App() {
               <Icon icon="pepicons-print:television" className="text-2xl" />
               <span>
                 PetrikTV
-                <span className="text-sm font-light self-end">redux</span>
+                <span className="text-sm font-light self-end">{appVersion || "redux"}</span>
               </span>
             </span>
           </div>
