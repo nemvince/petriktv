@@ -10,6 +10,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import News from "./components/News";
 import Weather from "./components/Weather";
 import RoomSubstitution from "./components/RoomSubstitution";
+import { check } from '@tauri-apps/plugin-updater';
+import { relaunch } from '@tauri-apps/plugin-process';
 
 dayjs.locale(hu);
 dayjs.extend(relativeTime);
@@ -24,6 +26,18 @@ function App() {
       const clockText = dayjs().format("HH:mm:ss");
       setClockText([dateText, clockText]);
     }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // check for updates every 60 minutes
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const update = await check();
+      if (update) {
+        await update.downloadAndInstall();
+        relaunch();
+      }
+    }, 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

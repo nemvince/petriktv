@@ -12,7 +12,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.62.3",
     "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-process": "^2.2.0",
     "@tauri-apps/plugin-shell": "^2.0.1",
+    "@tauri-apps/plugin-updater": "~2",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "react": "^18.3.1",
