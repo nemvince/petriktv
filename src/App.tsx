@@ -41,6 +41,33 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
+  const [appMessage, setAppMessage] = useState("");
+
+  // shortcuts:
+  // U: check for updates
+  // R: reload the app
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "u") {
+        setAppMessage("Checking for updates...");
+        check().then(async (update) => {
+          if (update) {
+            setAppMessage("Update found, downloading...");
+            await update.downloadAndInstall();
+            relaunch();
+          }
+          setAppMessage("No updates found.");
+          setTimeout(() => setAppMessage(""), 5000);
+        });
+      } else if (e.key === "r") {
+        setAppMessage("Reloading...");
+        window.location.reload();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <main className="h-full py-2 bg-gradient-to-br from-petrik-1 to-petrik-2 text-stone-100 flex flex-col">
@@ -56,6 +83,7 @@ function App() {
           </div>
           <div className="max-w-md flex center items-center">
             <News />
+            <span>{appMessage}</span>
           </div>
           <div className="flex gap-1 items-center">
             <span className="">{clockText[0]}</span>
