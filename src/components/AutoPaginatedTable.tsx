@@ -17,6 +17,7 @@ type AutoPaginatedTableProps<T> = {
   header: HeaderConfig<T>[];
   data: T[];
   emptyStateMessage?: string;
+  enableLogging?: boolean;
   keyExtractor?: (item: T, index: number) => string | number;
 };
 
@@ -27,16 +28,34 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
   const tableRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLTableSectionElement | null>(null);
   const rowRefs = useRef<(HTMLTableRowElement | null)[]>([]);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+
+  // Enhanced logging function
+  const log = (message: string, data?: any) => {
+    if (props.enableLogging) {
+      console.group("AutoPaginatedTable Log");
+      console.log(message);
+      if (data !== undefined) {
+        console.log(JSON.stringify(data, null, 2));
+      }
+      console.groupEnd();
+    }
+  };
 
   const calculateItemsPerPage = () => {
+    log("Calculating items per page", {
+      tableHeight: props.tableHeight,
+      dataLength: props.data.length
+    });
+
     if (!tableRef.current) {
-      console.warn("Table ref not set!");
+      log("Table ref not set, returning full data length");
       return props.data.length;
     }
 
     const validRowRefs = rowRefs.current.filter((ref) => ref !== null);
     if (validRowRefs.length === 0) {
-      console.warn("No valid row refs found!");
+      log("No valid row refs found, returning full data length");
       return props.data.length;
     }
 
@@ -44,16 +63,41 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     const headerHeight = props.headerHeight || headerRef.current?.offsetHeight || 0;
     const availableHeight = tableHeight - headerHeight - 1;
 
+    log("Height Calculations", {
+      tableHeight,
+      headerHeight,
+      availableHeight
+    });
+
     let totalHeight = 0;
     let calculatedItemsPerPage = 0;
+    const rowHeights: number[] = [];
 
     for (const row of validRowRefs) {
       if (row) {
-        totalHeight += row.offsetHeight;
-        if (totalHeight >= availableHeight) break;
+        const rowHeight = row.offsetHeight;
+        rowHeights.push(rowHeight);
+        totalHeight += rowHeight;
+
+        log("Row Height Check", {
+          currentRow: calculatedItemsPerPage,
+          rowHeight,
+          totalHeight,
+          availableHeight
+        });
+
+        if (totalHeight > availableHeight) {
+          break;
+        }
         calculatedItemsPerPage++;
       }
     }
+
+    log("Final Calculation Result", {
+      calculatedItemsPerPage,
+      totalHeight,
+      rowHeights
+    });
 
     return Math.min(calculatedItemsPerPage, props.data.length);
   };
@@ -62,12 +106,12 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     const timer = setTimeout(() => {
       const calculatedItemsPerPage = calculateItemsPerPage();
       setItemsPerPage(calculatedItemsPerPage);
-    }, 50);
+    }, 100);
 
     return () => clearTimeout(timer);
   }, [props.data, props.tableHeight]);
 
-  const totalPages = Math.ceil(props.data.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(props.data.length / itemsPerPage));
 
   const getCurrentPageData = () => {
     const startIndex = currentPage * itemsPerPage;
@@ -75,7 +119,11 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
   };
 
   const cyclePages = () => {
-    setCurrentPage((prevPage) => (prevPage < totalPages - 1 ? prevPage + 1 : 0));
+    setCurrentPage((prevPage) => {
+      if (totalPages <= 1 ) return 0;
+
+      return prevPage < totalPages - 1 ? prevPage + 1 : 0;
+    });
   };
 
   useEffect(() => {
@@ -96,6 +144,37 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
       }
     };
   }, [currentPage, totalPages, props.cycleInterval]);
+
+    // Setup ResizeObserver for dynamic height tracking
+    useEffect(() => {
+      // Create ResizeObserver
+      resizeObserverRef.current = new ResizeObserver((entries) => {
+        log("ResizeObserver Triggered", {
+          entries: entries.map(entry => ({
+            contentRect: {
+              width: entry.contentRect.width,
+              height: entry.contentRect.height
+            }
+          }))
+        });
+  
+        // Recalculate items per page on resize
+        const calculatedItemsPerPage = calculateItemsPerPage();
+        setItemsPerPage(calculatedItemsPerPage);
+      });
+  
+      // Observe table ref if available
+      if (tableRef.current) {
+        resizeObserverRef.current.observe(tableRef.current);
+      }
+  
+      // Cleanup observer on unmount
+      return () => {
+        if (resizeObserverRef.current) {
+          resizeObserverRef.current.disconnect();
+        }
+      };
+    }, [props.data, props.tableHeight]);
 
   // Default key extractor if not provided
   const getKey = props.keyExtractor || ((_: T, index: number) => index);
