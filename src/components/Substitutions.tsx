@@ -3,7 +3,10 @@ import AutoPaginatedTable from "./AutoPaginatedTable";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import periods from "../helpers/periods";
+
+dayjs.extend(customParseFormat);
 
 const Substitutions = () => {
   const { data, isLoading, error } = useQuery({
@@ -39,8 +42,8 @@ const Substitutions = () => {
           const transformedItem: Substitution = {
             // get first int from lesson string
             lesson: Number(item.ora.split(".")[0].match(/\d+/)[0]),
-            teacher: item.helytan,
-            missing: item.tname,
+            teacher: item.tname,
+            missing: item.helytan,
             className: item.class,
             classroom: item.terem.split("-")[0],
             consolidated: item.ovh === "1",
@@ -77,7 +80,6 @@ const Substitutions = () => {
           lesson: sortedLessons.length > 1
             ? `${sortedLessons[0]}-${sortedLessons[sortedLessons.length - 1]}`
             : sortedLessons[0],
-          consolidated: true,
         };
           } else {
         // If not all lessons have the same classroom and teacher, return the group as is
@@ -94,12 +96,19 @@ const Substitutions = () => {
         return now.isBefore(start);
       });
 
-      // if (!nextPeriod) {
-      //   return [];
-      // }
+      if (!nextPeriod) {
+        return [];
+      }
+
+      // remove entries in the past
+      const consolidatedDataInFuture = consolidatedData.filter((item) => {
+        const lessonStart = periods.find((p) => p.period === item.lesson);
+        const start = dayjs(lessonStart?.starttime, "HH:mm");
+        return now.isBefore(start);
+      });
 
       // Sort the consolidated data by lesson
-      return consolidatedData.sort((a, b) => {
+      return consolidatedDataInFuture.sort((a, b) => {
         // Handle string lessons (consolidated) and number lessons
         const lessonA = typeof a.lesson === "string"
           ? parseInt(a.lesson.split("-")[0])
@@ -141,11 +150,11 @@ const Substitutions = () => {
         { title: "Helyettes", icon: <Icon icon="mdi:account-group" />, key: "missing" },
         { title: "Osztály", icon: <Icon icon="mdi:school" />, key: "className" },
         { title: "Terem", icon: <Icon icon="mdi:location" />, key: "classroom" },
-        { title: "ÖVH", addClasses: "font-bold text-sm", key: "consolidated" },
+        { title: "ÖVH", addClasses: "font-bold text-sm", key: "consolidated", render: (value: boolean) => (value ? <div className="flex justify-center items-center"><Icon icon="mdi:check" /></div> : "") },
       ]}
       emptyStateMessage="Nincs helyettesítés!"
       data={data || []}
-      tableHeight={440}
+      tableHeight={438}
       cycleInterval={5000}
     />
   );
