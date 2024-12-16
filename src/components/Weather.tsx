@@ -6,9 +6,6 @@ const Weather = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["weather"],
     queryFn: async () => {
-      // QUERY IDE
-      // import.meta.env.VITE_WEATHER_KEY
-      // weatherapi.com
       const location = "Budapest, 1146 BMSZC Petrik";
       const { data } = await axios.get(
         "https://api.weatherapi.com/v1/current.json",
@@ -48,19 +45,19 @@ const Weather = () => {
     // use iconify
     <div className="h-full flex flex-row justify-between items-center p-3">
       <div className="flex justify-center items-center">
-        <img src={data.current.condition.icon} className="h-20 w-20" />   
-        <span className="self-center text-xl font-bold">{data.current.temp_c} °C</span> 
+        <img src={data.current.condition.icon} className="h-16 w-16" />   
+        <span className="self-center text-lg font-bold">{data.current.temp_c} °C</span> 
       </div>
       <div className="flex flex-col justify-center items-center gap-2">
         <div className="flex gap-2">
-          <Icon icon="mdi:weather-windy" className="text-3xl" />
-          <span className="self-center text-xl">
+          <Icon icon="mdi:weather-windy" className="text-2xl" />
+          <span className="self-center text-lg">
             {data.current.wind_kph} km/h
           </span>
         </div>
         <div className="flex gap-2">
-          <Icon icon="mdi:weather-rainy" className="text-3xl" />
-          <span className="self-center text-xl">{data.current.precip_mm} mm</span>
+          <Icon icon="mdi:weather-rainy" className="text-2xl" />
+          <span className="self-center text-lg">{data.current.precip_mm} mm</span>
         </div>
       </div>
     </div>
