@@ -38,9 +38,6 @@ const RoomSubstitution = () => {
         };
       });
 
-      console.log(todaySubs);
-
-      // flatten and return
       return Object.values(todaySubs);
     },
     refetchInterval: 120000,
@@ -63,8 +60,6 @@ const RoomSubstitution = () => {
       </div>
     );
   }
-
-  console.log(data);
 
   return (
     <AutoPaginatedTable
