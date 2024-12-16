@@ -25,6 +25,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
   const [itemsPerPage, setItemsPerPage] = useState(props.data.length);
   const cycleTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const tableRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLTableSectionElement | null>(null);
   const rowRefs = useRef<(HTMLTableRowElement | null)[]>([]);
 
   const calculateItemsPerPage = () => {
@@ -40,8 +41,8 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     }
 
     const tableHeight = props.tableHeight || 500;
-    const headerHeight = props.headerHeight || 65;
-    const availableHeight = tableHeight - headerHeight;
+    const headerHeight = props.headerHeight || headerRef.current?.offsetHeight || 0;
+    const availableHeight = tableHeight - headerHeight - 1;
 
     let totalHeight = 0;
     let calculatedItemsPerPage = 0;
@@ -113,14 +114,14 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     <div className="h-full border border-petrik-3 rounded-lg">
       <div
         ref={tableRef}
-        className="w-full overflow-hidden"
+        className="w-full"
         style={{
           height: `${props.tableHeight}px`,
           maxHeight: `${props.tableHeight}px`,
         }}
       >
         <table className="w-full h-full">
-          <thead>
+          <thead ref={headerRef}>
             <tr className="border-b border-petrik-3">
               {props.header.map((header, index) => (
                 <th
@@ -163,7 +164,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
       </div>
       <div className="mt-2 justify-between mx-4 items-center flex">
       <span>
-            Összesen: {props.data.length}
+            Összesen: {props.data.length} {headerRef.current?.offsetHeight}
           </span>
       {totalPages > 1 && (
           <span className="font-bold">
