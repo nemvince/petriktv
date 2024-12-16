@@ -40,7 +40,7 @@ jobs:
           workspaces: './src-tauri -> target'
 
       - name: install frontend dependencies
-        run: pnpm # change this to npm or pnpm depending on which one you use.
+        run: pnpm install
 
       - name: get environment variables into .env
         run: echo VITE_BKK_KEY=${{ secrets.BKK_KEY }} > .env && echo VITE_WEATHER_KEY=${{ secrets.WEATHER_KEY }} >> .env
