@@ -164,7 +164,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
       </div>
       <div className="mt-2 justify-between mx-4 items-center flex">
       <span>
-            Összesen: {props.data.length} {headerRef.current?.offsetHeight}
+            Összesen: {props.data.length}
           </span>
       {totalPages > 1 && (
           <span className="font-bold">
