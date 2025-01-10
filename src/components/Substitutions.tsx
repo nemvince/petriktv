@@ -72,8 +72,6 @@ const Substitutions = () => {
           b: any,
         ) => a - b);
 
-        // TODO: remove entries in the pastP
-
         // Create a consolidated entry
         return {
           ...group[0],
