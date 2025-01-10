@@ -105,7 +105,7 @@ function App() {
 
         <div className="mx-1.5 flex-grow grid grid-cols-3 gap-1.5">
           <div className="col-span-1 grid grid-rows-4 gap-1.5">
-            <div className="box grid grid-rows-3 border border-petrik-3">
+            <div className="box grid grid-rows-3">
               <BusDeparture stopId={"BKK_F01145"} displayName="Keleti felé" />
               <BusDeparture stopId={"BKK_F02716"} displayName="Zugló felé" />
               <BusDeparture
@@ -115,7 +115,7 @@ function App() {
               />
             </div>
 
-            <div className="box border border-petrik-3">
+            <div className="box">
               <Weather />
             </div>
 
