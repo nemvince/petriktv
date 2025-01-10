@@ -43,7 +43,7 @@ const Weather = () => {
 
   return (
     // use iconify
-    <div className="h-full flex flex-row justify-between items-center p-3">
+    <div className="h-full flex flex-row justify-between mx-4 items-center p-3">
       <div className="flex justify-center items-center">
         <img src={data.current.condition.icon} className="h-16 w-16" />   
         <span className="self-center text-lg font-bold">{data.current.temp_c} °C</span> 

@@ -111,6 +111,10 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
     return () => clearTimeout(timer);
   }, [props.data, props.tableHeight]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [props.data.length]);
+
   const totalPages = Math.max(1, Math.ceil(props.data.length / itemsPerPage));
 
   const getCurrentPageData = () => {
@@ -190,7 +194,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
   }
 
   return (
-    <div className="h-full border border-petrik-3 rounded-lg">
+    <div className="h-full rounded-lg">
       <div
         ref={tableRef}
         className="w-full"
