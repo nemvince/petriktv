@@ -2,8 +2,21 @@ import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
 import { useEffect, useState } from 'react';
 
-const useAppUpdate = () => {
+const useUpdateApp = () => {
 	const [appMessage, setAppMessage] = useState('');
+
+	const updateApp = async () => {
+		setAppMessage('Checking for updates...');
+		const update = await check();
+		if (!update) {
+			setAppMessage('No updates available');
+			return;
+		}
+
+		setAppMessage('Downloading update...');
+		await update.downloadAndInstall();
+		relaunch();
+	};
 
 	// shortcuts:
 	// U: check for updates
@@ -16,26 +29,26 @@ const useAppUpdate = () => {
 				window.location.reload();
 				return;
 			}
-
-			setTimeout(() => setAppMessage(''), 5000);
-			setAppMessage('Checking for updates...');
-
-			const update = await check();
-			if (!update) {
-				setAppMessage('No updates available');
-				return;
-			}
-
-			setAppMessage('Downloading update...');
-			await update.downloadAndInstall();
-			relaunch();
+			await updateApp();
 		};
 
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
+	//Update every 60 minutes
+	useEffect(() => {
+		const interval = setInterval(async () => {
+			const update = await check();
+			if (update) {
+				await update.downloadAndInstall();
+				relaunch();
+			}
+		}, 60 * 60 * 1000);
+		return () => clearInterval(interval);
+	}, []);
+
 	return { appMessage };
 };
 
-export default useAppUpdate;
+export default useUpdateApp;
