@@ -1,13 +1,7 @@
 import { Icon } from '@iconify/react';
 import News from './News';
-import dayjs from 'dayjs';
-import hu from 'dayjs/locale/hu';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import useAppVersion from '../hooks/useAppVersion';
 import useClock from '../hooks/useClock';
-
-dayjs.locale(hu);
-dayjs.extend(relativeTime);
 
 interface HeaderProps {
 	message: string;

@@ -1,5 +1,10 @@
-import dayjs from 'dayjs';
 import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
+import hu from 'dayjs/locale/hu';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.locale(hu);
+dayjs.extend(relativeTime);
 
 const useClock = () => {
 	const [clockText, setClockText] = useState(['', 'Betöltés...']);
