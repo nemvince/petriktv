@@ -2,9 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import AutoPaginatedTable from './AutoPaginatedTable';
-import periods from '../helpers/periods';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { getNextPeriod } from '../helpers/periods';
+import { REFETCH_INTERVALS } from '../lib/constants';
 
 type RoomSubstitutionEntry = {
 	lesson: number;
@@ -12,8 +11,6 @@ type RoomSubstitutionEntry = {
 	to: string;
 	class: string;
 };
-
-dayjs.extend(customParseFormat);
 
 const RoomSubstitution = () => {
 	const { data, isLoading, error } = useQuery({
@@ -38,13 +35,7 @@ const RoomSubstitution = () => {
 				return [];
 			}
 
-			const now = dayjs();
-
-			const nextPeriod = periods.find((period) => {
-				const start = dayjs(period.starttime, 'HH:mm');
-				return now.isBefore(start);
-			});
-
+			const nextPeriod = getNextPeriod();
 			if (!nextPeriod) {
 				return [];
 			}
@@ -64,9 +55,9 @@ const RoomSubstitution = () => {
 				(item) => item.lesson >= nextPeriod.period - 1
 			);
 
-			return Object.values(todaySubs);
+			return todaySubs;
 		},
-		refetchInterval: 120000,
+		refetchInterval: REFETCH_INTERVALS.roomSubtitutions,
 	});
 
 	if (isLoading) {
