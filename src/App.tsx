@@ -30,23 +30,28 @@ function App() {
 	// U: check for updates
 	// R: reload the app
 	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'u') {
-				setAppMessage('Checking for updates...');
-				check().then(async (update) => {
-					if (update) {
-						setAppMessage('Update found, downloading...');
-						await update.downloadAndInstall();
-						relaunch();
-					}
-					setAppMessage('No updates found.');
-					setTimeout(() => setAppMessage(''), 5000);
-				});
-			} else if (e.key === 'r') {
+		const handleKeyDown = async (e: KeyboardEvent) => {
+			if (e.key !== 'u' && e.key !== 'r') return;
+			if (e.key === 'r') {
 				setAppMessage('Reloading...');
 				window.location.reload();
+				return;
 			}
+
+			setTimeout(() => setAppMessage(''), 5000);
+			setAppMessage('Checking for updates...');
+
+			const update = await check();
+			if (!update) {
+				setAppMessage('No updates available');
+				return;
+			}
+
+			setAppMessage('Downloading update...');
+			await update.downloadAndInstall();
+			relaunch();
 		};
+
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, []);
