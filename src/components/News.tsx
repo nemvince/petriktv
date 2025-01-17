@@ -3,6 +3,7 @@ import axios from 'axios';
 import Marquee from 'react-fast-marquee';
 import Loading from './Loading';
 import QueryError from './QueryError';
+import { REFETCH_INTERVALS } from '../lib/constants';
 
 const News = () => {
 	const { data, isLoading, error } = useQuery({
@@ -28,7 +29,7 @@ const News = () => {
 				return response.data;
 			}
 		},
-		refetchInterval: 120000,
+		refetchInterval: REFETCH_INTERVALS.news,
 	});
 
 	if (isLoading) return <Loading />;
