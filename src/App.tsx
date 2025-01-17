@@ -24,37 +24,12 @@ function App() {
 		return () => clearInterval(interval);
 	}, []);
 
-	const [appMessage, setAppMessage] = useState('');
-
-	// shortcuts:
-	// U: check for updates
-	// R: reload the app
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'u') {
-				setAppMessage('Checking for updates...');
-				check().then(async (update) => {
-					if (update) {
-						setAppMessage('Update found, downloading...');
-						await update.downloadAndInstall();
-						relaunch();
-					}
-					setAppMessage('No updates found.');
-					setTimeout(() => setAppMessage(''), 5000);
-				});
-			} else if (e.key === 'r') {
-				setAppMessage('Reloading...');
-				window.location.reload();
-			}
-		};
-		window.addEventListener('keydown', handleKeyDown);
-		return () => window.removeEventListener('keydown', handleKeyDown);
-	}, []);
-
 	return (
 		<QueryClientProvider client={queryClient}>
 			<main className='h-full py-2 bg-gradient-to-br from-petrik-1 to-petrik-2 text-stone-100 flex flex-col'>
-				<Header appMessage={appMessage} />
+				<div className='box p-1 mx-2 mb-2 px-2.5 flex flex-row justify-between'>
+					<Header />
+				</div>
 
 				<div className='mx-1.5 flex-grow grid grid-cols-3 gap-1.5'>
 					<div className='col-span-1 grid grid-rows-4 gap-1.5'>

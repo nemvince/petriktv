@@ -4,21 +4,19 @@ import dayjs from 'dayjs';
 import hu from 'dayjs/locale/hu';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import useAppVersion from '../hooks/useAppVersion';
+import useAppUpdate from '../hooks/useAppUpdate';
 import useClock from '../hooks/useClock';
-
-interface HeaderProps {
-	appMessage: string;
-}
 
 dayjs.locale(hu);
 dayjs.extend(relativeTime);
 
-const Header = ({ appMessage }: HeaderProps) => {
+const Header = () => {
 	const { appVersion } = useAppVersion();
 	const { clockText } = useClock();
+	const { appMessage } = useAppUpdate();
 
 	return (
-		<div className='box p-1 mx-2 mb-2 px-2.5 flex flex-row justify-between'>
+		<>
 			<div>
 				<span className='font-bold text-lg flex gap-1 items-center'>
 					<Icon
@@ -41,7 +39,7 @@ const Header = ({ appMessage }: HeaderProps) => {
 				<span className=''>{clockText[0]}</span>
 				<span className='font-bold'>{clockText[1]}</span>
 			</div>
-		</div>
+		</>
 	);
 };
 
