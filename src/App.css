@@ -3,23 +3,26 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Host Grotesk';
-    src: url('./assets/font/HostGrotesk-VariableFont_wght.ttf') format('truetype');
+	font-family: 'Host Grotesk';
+	src: url('./assets/font/HostGrotesk-VariableFont_wght.ttf')
+		format('truetype');
 }
 
-body, #root, :root {
-    height: 100%;
+body,
+#root,
+:root {
+	height: 100%;
 }
 
 main {
-    zoom: 200%;
-    font-family: 'Host Grotesk', sans-serif;
+	zoom: 200%;
+	font-family: 'Host Grotesk', sans-serif;
 }
 
 .box {
-    @apply rounded-lg shadow-lg bg-black bg-opacity-30;
+	@apply rounded-lg bg-black bg-opacity-30 shadow-lg;
 }
 
 .text-shadow {
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 }

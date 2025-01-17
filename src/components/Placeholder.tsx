@@ -1,29 +1,29 @@
 import { Icon } from '@iconify/react';
 
 const AnimatedPlaceholder = ({ title }: { title: string }) => {
-    return (
-      <div className="h-full w-full justify-center items-center flex flex-col">
-        <div className="flex items-center gap-2">
-          <Icon 
-            icon="tabler:pacman" 
-            className="text-4xl -mr-3 text-petrik-1" 
-          />
-          {[1, 2, 3, 4, 5].map((dot) => (
-            <span 
-              key={dot} 
-              className="w-2 h-2 bg-petrik-1 rounded-full animate-pulse"
-              style={{
-                animationDelay: `${dot * 0.1}s`,
-                animationDuration: '2s'
-              }}
-            />
-          ))}
-        </div>
-        <span className="text-xl font-semibold mt-2 animate-fade-in">
-          {title}
-        </span>
-      </div>
-    );
+	return (
+		<div className='flex h-full w-full flex-col items-center justify-center'>
+			<div className='flex items-center gap-2'>
+				<Icon
+					icon='tabler:pacman'
+					className='-mr-3 text-4xl text-petrik-1'
+				/>
+				{[1, 2, 3, 4, 5].map((dot) => (
+					<span
+						key={dot}
+						className='h-2 w-2 animate-pulse rounded-full bg-petrik-1'
+						style={{
+							animationDelay: `${dot * 0.1}s`,
+							animationDuration: '2s',
+						}}
+					/>
+				))}
+			</div>
+			<span className='animate-fade-in mt-2 text-xl font-semibold'>
+				{title}
+			</span>
+		</div>
+	);
 };
 
 export default AnimatedPlaceholder;
