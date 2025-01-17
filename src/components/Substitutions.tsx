@@ -4,6 +4,8 @@ import { Icon } from '@iconify/react';
 import axios from 'axios';
 import { getNextPeriod } from '../helpers/periods';
 import { REFETCH_INTERVALS } from '../lib/constants';
+import Loading from './Loading';
+import QueryError from './QueryError';
 
 const Substitutions = () => {
 	const { data, isLoading, error } = useQuery({
@@ -119,29 +121,8 @@ const Substitutions = () => {
 		refetchInterval: REFETCH_INTERVALS.substitutions,
 	});
 
-	if (isLoading) {
-		return (
-			<div className='flex h-full items-center justify-center gap-3'>
-				<Icon
-					icon='mdi:loading'
-					className='animate-spin text-4xl'
-				/>
-				<span className='animate-pulse'>Betöltés...</span>
-			</div>
-		);
-	}
-
-	if (error) {
-		return (
-			<div className='flex h-full items-center justify-center gap-3'>
-				<Icon
-					icon='mdi:alert'
-					className='text-4xl text-red-500'
-				/>
-				<span>Hiba történt!</span>
-			</div>
-		);
-	}
+	if (isLoading) return <Loading />;
+	if (error) return <QueryError />;
 
 	return (
 		<AutoPaginatedTable

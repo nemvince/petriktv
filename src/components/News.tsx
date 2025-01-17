@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { Icon } from '@iconify/react';
 import axios from 'axios';
 import Marquee from 'react-fast-marquee';
+import Loading from './Loading';
+import QueryError from './QueryError';
 
 const News = () => {
 	const { data, isLoading, error } = useQuery({
@@ -30,29 +31,8 @@ const News = () => {
 		refetchInterval: 120000,
 	});
 
-	if (isLoading) {
-		return (
-			<div className='flex h-full items-center justify-center gap-3'>
-				<Icon
-					icon='mdi:loading'
-					className='animate-spin text-4xl'
-				/>
-				<span className='animate-pulse'>Betöltés...</span>
-			</div>
-		);
-	}
-
-	if (error) {
-		return (
-			<div className='flex h-full items-center justify-center gap-3'>
-				<Icon
-					icon='mdi:alert'
-					className='text-4xl text-red-500'
-				/>
-				<span>Hiba történt!</span>
-			</div>
-		);
-	}
+	if (isLoading) return <Loading />;
+	if (error) return <QueryError />;
 
 	return data.length > 0 ? (
 		<Marquee className='px-2 py-0.5'>{data[0].alert}</Marquee>
