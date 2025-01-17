@@ -15,7 +15,7 @@ const Substitutions = () => {
 					params: {
 						status: 'napihely',
 					},
-				}
+				},
 			);
 			if (response.status !== 200) {
 				throw new Error('Network response was not ok');
@@ -52,7 +52,7 @@ const Substitutions = () => {
 					acc[key].push(transformedItem);
 					return acc;
 				},
-				{}
+				{},
 			);
 
 			// Consolidate entries
@@ -60,10 +60,10 @@ const Substitutions = () => {
 				.map((group) => {
 					// Check if all lessons have the same classroom and teacher
 					const sameClassroom = group.every(
-						(g) => g.classroom === group[0].classroom
+						(g) => g.classroom === group[0].classroom,
 					);
 					const sameTeacher = group.every(
-						(g) => g.teacher === group[0].teacher
+						(g) => g.teacher === group[0].teacher,
 					);
 
 					if (sameClassroom && sameTeacher) {
@@ -81,7 +81,7 @@ const Substitutions = () => {
 											sortedLessons[
 												sortedLessons.length - 1
 											]
-									  }`
+										}`
 									: sortedLessons[0],
 						};
 					} else {
@@ -98,7 +98,7 @@ const Substitutions = () => {
 			}
 
 			const consolidatedDataInFuture = consolidatedData.filter(
-				(item) => (item.lesson as number) >= nextPeriod.period - 1
+				(item) => (item.lesson as number) >= nextPeriod.period - 1,
 			);
 
 			// Sort the consolidated data by lesson
@@ -121,10 +121,10 @@ const Substitutions = () => {
 
 	if (isLoading) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:loading'
-					className='text-4xl animate-spin'
+					className='animate-spin text-4xl'
 				/>
 				<span className='animate-pulse'>Betöltés...</span>
 			</div>
@@ -133,7 +133,7 @@ const Substitutions = () => {
 
 	if (error) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:alert'
 					className='text-4xl text-red-500'
@@ -178,7 +178,7 @@ const Substitutions = () => {
 					key: 'consolidated',
 					render: (value: boolean) =>
 						value ? (
-							<div className='flex justify-center items-center'>
+							<div className='flex items-center justify-center'>
 								<Icon icon='mdi:check' />
 							</div>
 						) : (

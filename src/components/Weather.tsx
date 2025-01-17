@@ -16,7 +16,7 @@ const Weather = () => {
 						q: location,
 						lang: 'hu',
 					},
-				}
+				},
 			);
 
 			return data;
@@ -26,10 +26,10 @@ const Weather = () => {
 
 	if (isLoading) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:loading'
-					className='text-4xl animate-spin'
+					className='animate-spin text-4xl'
 				/>
 				<span className='animate-pulse'>Betöltés...</span>
 			</div>
@@ -38,7 +38,7 @@ const Weather = () => {
 
 	if (error) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:alert'
 					className='text-4xl text-red-500'
@@ -50,8 +50,8 @@ const Weather = () => {
 
 	return (
 		// use iconify
-		<div className='h-full flex flex-row justify-between mx-4 items-center p-3'>
-			<div className='flex justify-center items-center'>
+		<div className='mx-4 flex h-full flex-row items-center justify-between p-3'>
+			<div className='flex items-center justify-center'>
 				<img
 					src={data.current.condition.icon}
 					className='h-16 w-16'
@@ -60,7 +60,7 @@ const Weather = () => {
 					{data.current.temp_c} °C
 				</span>
 			</div>
-			<div className='flex flex-col justify-center items-center gap-2'>
+			<div className='flex flex-col items-center justify-center gap-2'>
 				<div className='flex gap-2'>
 					<Icon
 						icon='mdi:weather-windy'

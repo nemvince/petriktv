@@ -14,12 +14,12 @@ function App() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<main className='h-full py-2 bg-gradient-to-br from-petrik-1 to-petrik-2 text-stone-100 flex flex-col'>
-				<div className='box p-1 mx-2 mb-2 px-2.5 flex flex-row justify-between'>
+			<main className='flex h-full flex-col bg-gradient-to-br from-petrik-1 to-petrik-2 py-2 text-stone-100'>
+				<div className='box mx-2 mb-2 flex flex-row justify-between p-1 px-2.5'>
 					<Header message={appMessage} />
 				</div>
 
-				<div className='mx-1.5 flex-grow grid grid-cols-3 gap-1.5'>
+				<div className='mx-1.5 grid flex-grow grid-cols-3 gap-1.5'>
 					<div className='col-span-1 grid grid-rows-4 gap-1.5'>
 						<div className='box grid grid-rows-3'>
 							<DepartureContainer />
@@ -29,12 +29,12 @@ function App() {
 							<Weather />
 						</div>
 
-						<div className='row-span-2 box'>
+						<div className='box row-span-2'>
 							<RoomSubstitution />
 						</div>
 					</div>
 
-					<div className='col-span-2 row-span-1 box'>
+					<div className='box col-span-2 row-span-1'>
 						<Substitutions />
 					</div>
 				</div>

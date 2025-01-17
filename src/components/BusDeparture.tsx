@@ -39,7 +39,7 @@ interface DepartureCardProps {
 const BusDeparture = (props: BusDepartureProps) => {
 	const getDeparturesForStop = async (
 		stopId: string,
-		routeFilter?: string
+		routeFilter?: string,
 	) => {
 		try {
 			//   paths["/my/endpoint"]["get"]["responses"][200]["content"]["application/json"]["schema"];
@@ -54,7 +54,7 @@ const BusDeparture = (props: BusDepartureProps) => {
 						minutesBefore: 0,
 						minutesAfter: 30,
 					},
-				}
+				},
 			);
 
 			const body =
@@ -73,14 +73,14 @@ const BusDeparture = (props: BusDepartureProps) => {
 					[key: string]: components['schemas']['TransitTrip'];
 				};
 				const filt = Object.values(trips).filter(
-					(trip) => trip.routeId === routeFilter
+					(trip) => trip.routeId === routeFilter,
 				);
 
 				if (filt.length > 0) {
 					const stopTimes = body.data?.entry
 						?.stopTimes as components['schemas']['TransitScheduleStopTime'][];
 					stopTime = stopTimes.filter((stopTime) =>
-						filt.map((f) => f.id).includes(stopTime.tripId)
+						filt.map((f) => f.id).includes(stopTime.tripId),
 					)[0];
 					routeId = routeFilter;
 					routeShortDesc = (
@@ -128,9 +128,9 @@ const BusDeparture = (props: BusDepartureProps) => {
 					props.stopId.map((stopId, i) =>
 						getDeparturesForStop(
 							stopId,
-							props.routeFilter?.[i] ?? ''
-						)
-					)
+							props.routeFilter?.[i] ?? '',
+						),
+					),
 				);
 				return results.find((result) => result !== null) || null;
 			} else {
@@ -142,10 +142,10 @@ const BusDeparture = (props: BusDepartureProps) => {
 
 	if (isLoading) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:loading'
-					className='text-4xl animate-spin'
+					className='animate-spin text-4xl'
 				/>
 				<span className='animate-pulse'>Betöltés...</span>
 			</div>
@@ -155,7 +155,7 @@ const BusDeparture = (props: BusDepartureProps) => {
 	if (error) {
 		console.error(error);
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:alert'
 					className='text-4xl text-red-500'
@@ -167,7 +167,7 @@ const BusDeparture = (props: BusDepartureProps) => {
 
 	if (!data) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:alert'
 					className='text-4xl text-red-500'
@@ -187,20 +187,20 @@ const BusDeparture = (props: BusDepartureProps) => {
 
 const DepartureCard = (props: DepartureCardProps) => {
 	return (
-		<div className='flex justify-between items-center mx-2'>
+		<div className='mx-2 flex items-center justify-between'>
 			<h2 className='self-center'>{props.displayName}</h2>
 			<div className='flex gap-1'>
-				<span className='font-bold text-sm self-center'>
+				<span className='self-center text-sm font-bold'>
 					{props.data.predictedDepartureTime
 						? dayjs(
-								(props.data.predictedDepartureTime || 0) * 1000
-						  ).fromNow()
+								(props.data.predictedDepartureTime || 0) * 1000,
+							).fromNow()
 						: '??'}
 				</span>
-				<div className='flex gap-1 items-center h-6 bg-cyan-600 pl-1 pr-1.5 rounded-full'>
+				<div className='flex h-6 items-center gap-1 rounded-full bg-cyan-600 pl-1 pr-1.5'>
 					<Icon
 						icon='mdi:bus'
-						className='text-xl p-0.5 rounded-full bg-white text-cyan-600'
+						className='rounded-full bg-white p-0.5 text-xl text-cyan-600'
 					/>
 					<span className='font-bold'>
 						{props.data.routeShortDesc || '???'}

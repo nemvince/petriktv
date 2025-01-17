@@ -13,24 +13,24 @@ const Header = ({ message }: HeaderProps) => {
 	return (
 		<>
 			<div>
-				<span className='font-bold text-lg flex gap-1 items-center'>
+				<span className='flex items-center gap-1 text-lg font-bold'>
 					<Icon
 						icon='pepicons-print:television'
 						className='text-2xl'
 					/>
 					<span>
 						PetrikTV
-						<span className='text-sm font-light self-end'>
+						<span className='self-end text-sm font-light'>
 							{appVersion || 'redux'}
 						</span>
 					</span>
 				</span>
 			</div>
-			<div className='max-w-md flex center items-center'>
+			<div className='center flex max-w-md items-center'>
 				<News />
 				<span>{message}</span>
 			</div>
-			<div className='flex gap-3 items-center'>
+			<div className='flex items-center gap-3'>
 				<span className=''>{clockText[0]}</span>
 				<span className='font-bold'>{clockText[1]}</span>
 			</div>

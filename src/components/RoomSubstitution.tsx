@@ -22,7 +22,7 @@ const RoomSubstitution = () => {
 					params: {
 						status: 'teremhely',
 					},
-				}
+				},
 			);
 
 			if (response.status !== 200) {
@@ -48,11 +48,11 @@ const RoomSubstitution = () => {
 						to: item.terem.split('-')[0],
 						class: item.class,
 					};
-				}
+				},
 			);
 
 			todaySubs = todaySubs.filter(
-				(item) => item.lesson >= nextPeriod.period - 1
+				(item) => item.lesson >= nextPeriod.period - 1,
 			);
 
 			return todaySubs;
@@ -62,10 +62,10 @@ const RoomSubstitution = () => {
 
 	if (isLoading) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:loading'
-					className='text-4xl animate-spin'
+					className='animate-spin text-4xl'
 				/>
 				<span className='animate-pulse'>Betöltés...</span>
 			</div>
@@ -74,7 +74,7 @@ const RoomSubstitution = () => {
 
 	if (error) {
 		return (
-			<div className='h-full flex justify-center items-center gap-3'>
+			<div className='flex h-full items-center justify-center gap-3'>
 				<Icon
 					icon='mdi:alert'
 					className='text-4xl text-red-500'

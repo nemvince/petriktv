@@ -40,13 +40,16 @@ const useUpdateApp = () => {
 
 	//Update every 60 minutes
 	useEffect(() => {
-		const interval = setInterval(async () => {
-			const update = await check();
-			if (update) {
-				await update.downloadAndInstall();
-				relaunch();
-			}
-		}, 60 * 60 * 1000);
+		const interval = setInterval(
+			async () => {
+				const update = await check();
+				if (update) {
+					await update.downloadAndInstall();
+					relaunch();
+				}
+			},
+			60 * 60 * 1000,
+		);
 		return () => clearInterval(interval);
 	}, []);
 
