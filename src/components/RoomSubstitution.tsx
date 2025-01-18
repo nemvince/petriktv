@@ -1,64 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { Icon } from '@iconify/react/dist/iconify.js';
-import AutoPaginatedTable from './AutoPaginatedTable';
-import { getNextPeriod } from '../helpers/periods';
 import { REFETCH_INTERVALS } from '../lib/constants';
+import { Icon } from '@iconify/react/dist/iconify.js';
 import Loading from './Loading';
 import QueryError from './QueryError';
-
-type RoomSubstitutionEntry = {
-	lesson: number;
-	from: string;
-	to: string;
-	class: string;
-};
+import AutoPaginatedTable from './AutoPaginatedTable';
+import { RoomSubstitutionEntry } from '../schema/types';
+import getRoomSubstitutions from '../helpers/getRoomSubstitutions';
 
 const RoomSubstitution = () => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['roomSubstitution'],
-		queryFn: async () => {
-			const response = await axios.get(
-				'https://helyettesites.petrik.hu/api/',
-				{
-					params: {
-						status: 'teremhely',
-					},
-				},
-			);
-
-			if (response.status !== 200) {
-				throw new Error('Network response was not ok');
-			}
-
-			const respData = response.data;
-
-			if (respData.length === 0) {
-				return [];
-			}
-
-			const nextPeriod = getNextPeriod();
-			if (!nextPeriod) {
-				return [];
-			}
-
-			let todaySubs: RoomSubstitutionEntry[] = respData.map(
-				(item: any) => {
-					return {
-						lesson: Number(item.ora.split('.')[0].match(/\d+/)[0]),
-						from: item.tname.split('-')[0],
-						to: item.terem.split('-')[0],
-						class: item.class,
-					};
-				},
-			);
-
-			todaySubs = todaySubs.filter(
-				(item) => item.lesson >= nextPeriod.period - 1,
-			);
-
-			return todaySubs;
-		},
+		queryFn: getRoomSubstitutions,
 		refetchInterval: REFETCH_INTERVALS.roomSubtitutions,
 	});
 
@@ -67,7 +19,7 @@ const RoomSubstitution = () => {
 
 	return (
 		<AutoPaginatedTable
-			data={data || []}
+			data={data as RoomSubstitutionEntry[] | []}
 			header={[
 				{
 					icon: <Icon icon='mdi:clock' />,
