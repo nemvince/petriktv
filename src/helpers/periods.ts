@@ -5,11 +5,14 @@ dayjs.extend(customParseFormat);
 const getCurrentPeriod = () => {
 	const now = dayjs();
 
-	const currentPeriod: TPeriod | undefined = periods.find((period) => {
-		const start = dayjs(period.starttime, 'HH:mm');
-		const end = dayjs(period.endtime, 'HH:mm');
+	const currentPeriod: TPeriod | undefined = periods.find((period, idx) => {
+		const endTime = dayjs(period.endtime, 'HH:mm');
+		const prevEndTime =
+			idx > 0
+				? dayjs(periods[idx - 1].endtime, 'HH:mm')
+				: dayjs('00:00', 'HH:mm');
 
-		return now.isAfter(start) && now.isBefore(end);
+		return now.isAfter(prevEndTime) && now.isBefore(endTime);
 	});
 
 	return currentPeriod;
