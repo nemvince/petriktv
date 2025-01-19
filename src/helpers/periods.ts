@@ -2,15 +2,27 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
-const getNextPeriod = () => {
+const getCurrentPeriod = () => {
 	const now = dayjs();
 
-	const nextPeriod = periods.find((period) => {
-		const start = dayjs(period.starttime, 'HH:mm');
-		return now.isBefore(start);
+	const currentPeriod: TPeriod | undefined = periods.find((period, idx) => {
+		const endTime = dayjs(period.endtime, 'HH:mm');
+		const prevEndTime =
+			idx > 0
+				? dayjs(periods[idx - 1].endtime, 'HH:mm')
+				: dayjs('00:00', 'HH:mm');
+
+		return now.isAfter(prevEndTime) && now.isBefore(endTime);
 	});
 
-	return nextPeriod;
+	return currentPeriod;
+};
+
+type PeriodNumber = (typeof periods)[number]['period'];
+type TPeriod = {
+	period: PeriodNumber;
+	starttime: string;
+	endtime: string;
 };
 
 const periods = [
@@ -102,4 +114,5 @@ const periods = [
 ] as const;
 
 export default periods;
-export { getNextPeriod };
+export { getCurrentPeriod };
+export type { PeriodNumber };
