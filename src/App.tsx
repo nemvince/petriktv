@@ -14,7 +14,7 @@ function App() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<main className='flex h-full flex-col bg-gradient-to-br from-petrik-1 to-petrik-2 py-2 text-stone-100'>
+			<main className='flex h-full w-full flex-col bg-gradient-to-br from-petrik-1 to-petrik-2 py-2 text-stone-100'>
 				<div className='box mx-2 mb-2 flex flex-row justify-between p-1 px-2.5'>
 					<Header message={appMessage} />
 				</div>

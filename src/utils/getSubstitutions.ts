@@ -16,86 +16,97 @@ const getSubstitutions = async () => {
 	const currentPeriod = getCurrentPeriod();
 	if (!currentPeriod || !respData || !Array.isArray(respData)) return [];
 
-	// First, group the data by missing teacher and class name
+	//Group the data by teacher and class
 	const groupedData = groupData(respData);
 
-	// Consolidate entries
-	const consolidatedData: Substitution[] = Object.values(groupedData)
-		.map((group) => {
-			// Check if all lessons have the same classroom and teacher
-			const sameClassroom = group.every(
-				(g) => g.classroom === group[0].classroom,
-			);
-			const sameTeacher = group.every(
-				(g) => g.teacher === group[0].teacher,
-			);
+	// Consolidate the data by teacher, class, missing, and classroom
+	const consolidatedData = consolidateData(Object.values(groupedData).flat());
 
-			if (sameClassroom && sameTeacher) {
-				// Sort lessons to ensure correct order
-				const sortedLessons = group
-					.map((g) => g.lesson)
-					.sort((a: any, b: any) => a - b);
-
-				// Create a consolidated entry
-				return {
-					...group[0],
-					lesson:
-						sortedLessons.length > 1
-							? `${sortedLessons[0]}-${
-									sortedLessons[sortedLessons.length - 1]
-								}`
-							: sortedLessons[0],
-				};
-			} else {
-				// If not all lessons have the same classroom and teacher, return the group as is
-				return group;
-			}
-		})
-		.flat();
-
-	const consolidatedDataInFuture = consolidatedData.filter(
-		(item) => (item.lesson as number) >= currentPeriod.period,
-	);
+	//Remove the substitutions that are in the past
+	const currentSubstitutions = consolidatedData.filter((item) => {
+		const lesson =
+			typeof item.lesson === 'string'
+				? Number(item.lesson.split('-').at(-1))
+				: item.lesson;
+		return lesson >= currentPeriod.period;
+	});
 
 	// Sort the consolidated data by lesson
-	return consolidatedDataInFuture.sort((a, b) => {
-		// Handle string lessons (consolidated) and number lessons
+	return currentSubstitutions.sort((a, b) => {
 		const lessonA =
 			typeof a.lesson === 'string'
-				? parseInt(a.lesson.split('-')[0])
+				? Number(a.lesson.split('-')[0])
 				: a.lesson;
 		const lessonB =
 			typeof b.lesson === 'string'
-				? parseInt(b.lesson.split('-')[0])
+				? Number(b.lesson.split('-')[0])
 				: b.lesson;
 
 		return lessonA - lessonB;
 	});
 };
+export default getSubstitutions;
 
-const groupData = (data: any[]): Record<string, Substitution[]> => {
-	const grouped = data.reduce(
-		(acc: Record<string, Substitution[]>, item: any) => {
-			const key = `${item.tname}-${item.class}`;
-			const transformedItem: Substitution = {
-				lesson: Number(item.ora.split('.')[0]),
-				teacher: item.tname,
-				missing: item.helytan,
-				className: item.class,
-				classroom: item.terem.split('-')[0],
-				consolidated: item.ovh === '1',
+const groupData = (data: any[]): Record<string, Substitution[]> =>
+	data.reduce((acc: Record<string, Substitution[]>, item: any) => {
+		const key = `${item.tname}-${item.class}`;
+		const transformedItem: Substitution = {
+			lesson: Number(item.ora.split('.')[0]),
+			teacher: item.tname,
+			missing: item.helytan,
+			className: item.class,
+			classroom: item.terem.split('-')[0],
+			consolidated: item.ovh === '1',
+		};
+
+		if (!acc[key]) {
+			acc[key] = [];
+		}
+		acc[key].push(transformedItem);
+		return acc;
+	}, {});
+
+const consolidateData = (data: Substitution[]): Substitution[] => {
+	const consolidatedData: Record<string, Substitution> = data.reduce(
+		(acc: Record<string, Substitution>, item: Substitution) => {
+			const key = `${item.teacher}-${item.className}-${item.missing}-${item.classroom}`;
+			if (!acc[key]) {
+				acc[key] = item;
+				return acc;
+			}
+
+			const existingItem = acc[key];
+			const lessonA =
+				typeof item.lesson === 'string'
+					? item.lesson.split('-')
+					: [item.lesson];
+			const lessonB =
+				typeof existingItem.lesson === 'string'
+					? existingItem.lesson.split('-')
+					: [existingItem.lesson];
+
+			const lessonStart = Math.min(
+				Number(lessonA[0]),
+				Number(lessonB[0]),
+			);
+
+			const lessonEnd = Math.max(
+				Number(lessonA.at(-1)),
+				Number(lessonB.at(-1)),
+			);
+
+			const consolidatedLesson = `${lessonStart}-${lessonEnd}`;
+
+			acc[key] = {
+				...existingItem,
+				lesson: consolidatedLesson,
+				consolidated: true,
 			};
 
-			if (!acc[key]) {
-				acc[key] = [];
-			}
-			acc[key].push(transformedItem);
 			return acc;
 		},
 		{},
 	);
 
-	return grouped;
+	return Object.values(consolidatedData);
 };
-
-export default getSubstitutions;
