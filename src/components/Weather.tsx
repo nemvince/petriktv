@@ -1,28 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
-import axios from 'axios';
 import { REFETCH_INTERVALS } from '../lib/constants';
 import Loading from './Queries/Loading';
 import QueryError from './Queries/QueryError';
+import getWeather from '../utils/getWeather';
+
+const PetrikLocation = '47.50535837979173, 19.090123083749727';
 
 const Weather = () => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['weather'],
-		queryFn: async () => {
-			const location = 'Budapest, 1146 BMSZC Petrik';
-			const { data } = await axios.get(
-				'https://api.weatherapi.com/v1/current.json',
-				{
-					params: {
-						key: import.meta.env.VITE_WEATHER_KEY,
-						q: location,
-						lang: 'hu',
-					},
-				},
-			);
-
-			return data;
-		},
+		queryFn: async () => getWeather(PetrikLocation),
 		refetchInterval: REFETCH_INTERVALS.weather,
 	});
 
@@ -30,7 +18,6 @@ const Weather = () => {
 	if (error) return <QueryError />;
 
 	return (
-		// use iconify
 		<div className='mx-4 flex h-full flex-row items-center justify-between p-3'>
 			<div className='flex items-center justify-center'>
 				<img
