@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Substitutions from './components/Substitutions';
 import RoomSubstitution from './components/RoomSubstitution';
 import Weather from './components/Weather';
-import DepartureContainer from './components/DepartureContainer';
+import DepartureContainer from './components/BusDeparture/DepartureContainer';
 import useUpdateApp from './hooks/useUpdateApp';
 
 const queryClient = new QueryClient();

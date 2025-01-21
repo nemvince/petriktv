@@ -1,40 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
-import { components, paths } from '../schema/bkk';
-import UpdateLocale from 'dayjs/plugin/updateLocale';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import 'dayjs/locale/hu';
-import { REFETCH_INTERVALS } from '../lib/constants';
-import Loading from './Loading';
-import QueryError from './QueryError';
-
-dayjs.extend(relativeTime);
-dayjs.extend(UpdateLocale);
-dayjs.updateLocale('hu', {
-	relativeTime: {
-		future: '%s',
-		past: 'Indul!',
-		s: 'Indul!',
-		m: 'Indul!',
-		mm: "%d'",
-		h: 'Nincs járat',
-		hh: 'Nincs járat',
-	},
-});
+import { components, paths } from '../../schema/bkk';
+import { REFETCH_INTERVALS } from '../../lib/constants';
+import Loading from '../Queries/Loading';
+import QueryError from '../Queries/QueryError';
+import DepartureCard from './DepartureCard';
 
 interface BusDepartureProps {
 	stopId: string | string[];
 	routeFilter?: (string | null)[];
-	displayName: string;
-}
-
-interface DepartureCardProps {
-	data: {
-		routeShortDesc: string | null;
-		predictedDepartureTime: number | null | undefined;
-	};
 	displayName: string;
 }
 
@@ -162,32 +137,6 @@ const BusDeparture = (props: BusDepartureProps) => {
 			data={data}
 			displayName={props.displayName}
 		/>
-	);
-};
-
-const DepartureCard = (props: DepartureCardProps) => {
-	return (
-		<div className='mx-2 flex items-center justify-between'>
-			<h2 className='self-center'>{props.displayName}</h2>
-			<div className='flex gap-1'>
-				<span className='self-center text-sm font-bold'>
-					{props.data.predictedDepartureTime
-						? dayjs(
-								(props.data.predictedDepartureTime || 0) * 1000,
-							).fromNow()
-						: '??'}
-				</span>
-				<div className='flex h-6 items-center gap-1 rounded-full bg-cyan-600 pl-1 pr-1.5'>
-					<Icon
-						icon='mdi:bus'
-						className='rounded-full bg-white p-0.5 text-xl text-cyan-600'
-					/>
-					<span className='font-bold'>
-						{props.data.routeShortDesc || '???'}
-					</span>
-				</div>
-			</div>
-		</div>
 	);
 };
 

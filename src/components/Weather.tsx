@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import axios from 'axios';
 import { REFETCH_INTERVALS } from '../lib/constants';
-import Loading from './Loading';
-import QueryError from './QueryError';
+import Loading from './Queries/Loading';
+import QueryError from './Queries/QueryError';
 
 const Weather = () => {
 	const { data, isLoading, error } = useQuery({

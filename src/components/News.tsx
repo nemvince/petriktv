@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import Marquee from 'react-fast-marquee';
-import Loading from './Loading';
-import QueryError from './QueryError';
+import Loading from './Queries/Loading';
+import QueryError from './Queries/QueryError';
 import { REFETCH_INTERVALS } from '../lib/constants';
-import getNews from '../helpers/getNews';
+import getNews from '../utils/getNews';
 
 const News = () => {
 	const { data, isLoading, error } = useQuery({
