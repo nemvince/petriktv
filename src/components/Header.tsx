@@ -30,7 +30,7 @@ const Header = ({ message }: HeaderProps) => {
 				<News />
 				<span>{message}</span>
 			</div>
-			<div className='flex items-center gap-3'>
+			<div className='flex items-center gap-2'>
 				<span className=''>{clockText[0]}</span>
 				<span className='font-bold'>{clockText[1]}</span>
 			</div>

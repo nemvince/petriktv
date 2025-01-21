@@ -1,6 +1,9 @@
 import { Icon } from '@iconify/react';
 
-const AnimatedPlaceholder = ({ title }: { title: string }) => {
+interface AnimatedPlaceholderProps {
+	title: string;
+}
+const AnimatedPlaceholder = ({ title }: AnimatedPlaceholderProps) => {
 	return (
 		<div className='flex h-full w-full flex-col items-center justify-center'>
 			<div className='flex items-center gap-2'>

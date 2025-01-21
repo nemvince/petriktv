@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react';
-import AnimatedPlaceholder from './Placeholder';
+import AnimatedPlaceholder from './AnimatedPlaceholder';
 
 type HeaderConfig<T> = {
 	title?: string;
