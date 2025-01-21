@@ -8,23 +8,6 @@ export const REFETCH_INTERVALS = {
 	weather: 10 * 60 * 1000,
 } as const;
 
-export const APP_UPDATE_INTERVAL = 30 * 60 * 1000;
-export const APP_UPDATE_MESSAGE_LIFETIME = 5 * 1000;
+const PETRIK_LOCATION = '47.50535837979173, 19.090123083749727' as const;
 
-export const PETRIK_LOCATION = '47.50535837979173, 19.090123083749727' as const;
-
-export const DEPARTURES: Departure[] = [
-	{
-		stopId: 'BKK_F01145',
-		displayName: 'Keleti felé',
-	},
-	{
-		stopId: 'BKK_F02716',
-		displayName: 'Zugló felé',
-	},
-	{
-		stopId: ['BKK_F01149', 'BKK_F01146'],
-		routeFilter: [null, 'BKK_0301'],
-		displayName: 'Hősök tere felé',
-	},
-] as const;
+export { REFETCH_INTERVALS, PETRIK_LOCATION };
