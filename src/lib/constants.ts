@@ -6,4 +6,6 @@ const REFETCH_INTERVALS = {
 	weather: 10 * 60 * 1000,
 } as const;
 
-export { REFETCH_INTERVALS };
+const PETRIK_LOCATION = '47.50535837979173, 19.090123083749727' as const;
+
+export { REFETCH_INTERVALS, PETRIK_LOCATION };
