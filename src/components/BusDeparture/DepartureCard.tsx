@@ -25,15 +25,15 @@ interface DepartureCardProps {
 	};
 	displayName: string;
 }
-const DepartureCard = (props: DepartureCardProps) => {
+const DepartureCard = ({ data, displayName }: DepartureCardProps) => {
 	return (
 		<div className='mx-2 flex items-center justify-between'>
-			<h2 className='self-center'>{props.displayName}</h2>
+			<h2 className='self-center'>{displayName}</h2>
 			<div className='flex gap-1'>
 				<span className='self-center text-sm font-bold'>
-					{props.data.predictedDepartureTime
+					{data.predictedDepartureTime
 						? dayjs(
-								(props.data.predictedDepartureTime || 0) * 1000,
+								(data.predictedDepartureTime || 0) * 1000,
 							).fromNow()
 						: '??'}
 				</span>
@@ -43,7 +43,7 @@ const DepartureCard = (props: DepartureCardProps) => {
 						className='rounded-full bg-white p-0.5 text-xl text-cyan-600'
 					/>
 					<span className='font-bold'>
-						{props.data.routeShortDesc || '???'}
+						{data.routeShortDesc || '???'}
 					</span>
 				</div>
 			</div>
