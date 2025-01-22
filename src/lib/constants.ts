@@ -1,4 +1,4 @@
-import { Departure } from '../schema/types';
+import { Departure } from '@/schema/types';
 
 export const REFETCH_INTERVALS = {
 	substitutions: 60 * 1000,

@@ -1,5 +1,5 @@
-import { DEPARTURES } from '../../lib/constants';
-import BusDeparture from './BusDeparture';
+import { DEPARTURES } from '@/lib/constants';
+import BusDeparture from '@/components/BusDeparture/BusDeparture';
 
 const DepartureContainer = () => {
 	return (
