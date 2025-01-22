@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
-import { PETRIK_LOCATION, REFETCH_INTERVALS } from '../lib/constants';
-import Loading from './Queries/Loading';
-import QueryError from './Queries/QueryError';
-import getWeather from '../utils/getWeather';
+import { PETRIK_LOCATION, REFETCH_INTERVALS } from '@/lib/constants';
+import Loading from '@/components/Queries/Loading';
+import QueryError from '@/components/Queries/QueryError';
+import getWeather from '@/utils/getWeather';
 
 const Weather = () => {
 	const { data, isLoading, error } = useQuery({

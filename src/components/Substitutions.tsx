@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import AutoPaginatedTable from './AutoPaginatedTable/AutoPaginatedTable';
+import AutoPaginatedTable from '@/components/AutoPaginatedTable/AutoPaginatedTable';
 import { Icon } from '@iconify/react';
-import { REFETCH_INTERVALS } from '../lib/constants';
-import Loading from './Queries/Loading';
-import QueryError from './Queries/QueryError';
-import getSubstitutions from '../utils/getSubstitutions';
+import { REFETCH_INTERVALS } from '@/lib/constants';
+import Loading from '@/components/Queries/Loading';
+import QueryError from '@/components/Queries/QueryError';
+import getSubstitutions from '@/utils/getSubstitutions';
 
 const Substitutions = () => {
 	const { data, isLoading, error } = useQuery({

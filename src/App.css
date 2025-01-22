@@ -4,7 +4,7 @@
 
 @font-face {
 	font-family: 'Host Grotesk';
-	src: url('./assets/font/HostGrotesk-VariableFont_wght.ttf')
+	src: url('@/assets/font/HostGrotesk-VariableFont_wght.ttf')
 		format('truetype');
 }
 
@@ -17,7 +17,7 @@ body,
 }
 
 main {
-	zoom: 175%;
+	zoom: 190%;
 	font-family: 'Host Grotesk', sans-serif;
 }
 

@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
-import News from './News';
-import useAppVersion from '../hooks/useAppVersion';
-import useClock from '../hooks/useClock';
+import News from '@/components/News';
+import useAppVersion from '@/hooks/useAppVersion';
+import useClock from '@/hooks/useClock';
 
 interface HeaderProps {
 	message: string;

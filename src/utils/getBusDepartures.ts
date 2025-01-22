@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { components, paths } from '../schema/bkk';
+import { components, paths } from '@/schema/bkk';
 
 const getDeparturesForStop = async (stopId: string, routeFilter?: string) => {
 	try {

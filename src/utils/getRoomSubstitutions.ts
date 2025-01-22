@@ -2,8 +2,8 @@ import axios from 'axios';
 import {
 	RoomSubstitutionEntry,
 	RoomSubstitutionResponse,
-} from '../schema/types';
-import { getCurrentPeriod, PeriodNumber } from './periods';
+} from '@/schema/types';
+import { getCurrentPeriod, PeriodNumber } from '@/utils/periods';
 
 const getRoomSubstitutions = async (): Promise<RoomSubstitutionEntry[]> => {
 	const response = await axios.get('https://helyettesites.petrik.hu/api/', {

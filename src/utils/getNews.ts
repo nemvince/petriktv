@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { NewsResponse } from '../schema/types';
+import { NewsResponse } from '@/schema/types';
 
 const getNews = async (): Promise<NewsResponse[]> => {
 	const response = await axios.get('https://helyettesites.petrik.hu/api/', {

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getCurrentPeriod } from './periods';
-import { Substitution } from '../schema/types';
+import { getCurrentPeriod } from '@/utils/periods';
+import { Substitution } from '@/schema/types';
 
 const getSubstitutions = async () => {
 	const response = await axios.get('https://helyettesites.petrik.hu/api/', {
@@ -23,6 +23,7 @@ const getSubstitutions = async () => {
 	const consolidatedData = consolidateData(Object.values(groupedData).flat());
 
 	//Remove the substitutions that are in the past
+	/*
 	const currentSubstitutions = consolidatedData.filter((item) => {
 		const lesson =
 			typeof item.lesson === 'string'
@@ -30,6 +31,9 @@ const getSubstitutions = async () => {
 				: item.lesson;
 		return lesson >= currentPeriod.period;
 	});
+	*/
+
+	const currentSubstitutions = consolidatedData;
 
 	// Sort the consolidated data by lesson
 	return currentSubstitutions.sort((a, b) => {
