@@ -23,7 +23,6 @@ const getSubstitutions = async () => {
 	const consolidatedData = consolidateData(Object.values(groupedData).flat());
 
 	//Remove the substitutions that are in the past
-	/*
 	const currentSubstitutions = consolidatedData.filter((item) => {
 		const lesson =
 			typeof item.lesson === 'string'
@@ -31,9 +30,6 @@ const getSubstitutions = async () => {
 				: item.lesson;
 		return lesson >= currentPeriod.period;
 	});
-	*/
-
-	const currentSubstitutions = consolidatedData;
 
 	// Sort the consolidated data by lesson
 	// put consolidated lessons to the end of starting lesson group
