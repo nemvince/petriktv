@@ -1,21 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
-import { REFETCH_INTERVALS } from '../../lib/constants';
-import Loading from '../Queries/Loading';
-import QueryError from '../Queries/QueryError';
-import DepartureCard from './DepartureCard';
-import getBusDepartures from '../../utils/getBusDepartures';
+import { REFETCH_INTERVALS } from '@/lib/constants';
+import Loading from '@/components/Queries/Loading';
+import QueryError from '@/components/Queries/QueryError';
+import getBusDepartures from '@/utils/getBusDepartures';
+import { Departure } from '@/schema/types';
+import DepartureCard from '@/components/BusDeparture/DepartureCard';
 
-interface BusDepartureProps {
-	stopId: string | string[];
-	routeFilter?: (string | null)[];
-	displayName: string;
-}
-const BusDeparture = ({
-	stopId,
-	routeFilter,
-	displayName,
-}: BusDepartureProps) => {
+const BusDeparture = ({ stopId, routeFilter, displayName }: Departure) => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['busDeparture', stopId],
 		retry() {

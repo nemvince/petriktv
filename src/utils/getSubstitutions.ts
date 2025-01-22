@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getCurrentPeriod } from './periods';
-import { Substitution } from '../schema/types';
+import { getCurrentPeriod } from '@/utils/periods';
+import { Substitution } from '@/schema/types';
 
 const getSubstitutions = async () => {
 	const response = await axios.get('https://helyettesites.petrik.hu/api/', {

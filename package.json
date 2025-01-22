@@ -29,11 +29,13 @@
 		"@types/react-dom": "^18.3.5",
 		"@vitejs/plugin-react": "^4.3.4",
 		"autoprefixer": "^10.4.20",
+		"path": "^0.12.7",
 		"postcss": "^8.4.49",
 		"prettier": "^3.4.2",
 		"prettier-plugin-tailwindcss": "^0.6.10",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.7.3",
+		"url": "^0.11.4",
 		"vite": "^5.4.11"
 	},
 	"packageManager": "pnpm@9.14.4+sha512.c8180b3fbe4e4bca02c94234717896b5529740a6cbadf19fa78254270403ea2f27d4e1d46a08a0f56c89b63dc8ebfd3ee53326da720273794e6200fcf0d184ab"

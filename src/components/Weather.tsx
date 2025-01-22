@@ -1,16 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
-import { REFETCH_INTERVALS } from '../lib/constants';
-import Loading from './Queries/Loading';
-import QueryError from './Queries/QueryError';
-import getWeather from '../utils/getWeather';
-
-const PetrikLocation = '47.50535837979173, 19.090123083749727';
+import { PETRIK_LOCATION, REFETCH_INTERVALS } from '@/lib/constants';
+import Loading from '@/components/Queries/Loading';
+import QueryError from '@/components/Queries/QueryError';
+import getWeather from '@/utils/getWeather';
 
 const Weather = () => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['weather'],
-		queryFn: async () => getWeather(PetrikLocation),
+		queryFn: async () => getWeather(PETRIK_LOCATION),
 		refetchInterval: REFETCH_INTERVALS.weather,
 	});
 

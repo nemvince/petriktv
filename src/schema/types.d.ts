@@ -21,4 +21,10 @@ export type RoomSubstitutionResponse = {
 	terem: string;
 };
 
+export type Departure = {
+	stopId: string | string[];
+	displayName: string;
+	routeFilter?: (null | string)[];
+};
+
 export type NewsResponse = any;
