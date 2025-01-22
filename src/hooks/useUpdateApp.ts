@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import {
 	APP_UPDATE_INTERVAL,
 	APP_UPDATE_MESSAGE_LIFETIME,
-} from '@/lib/constants';
+} from '../lib/constants';
 
 const useUpdateApp = () => {
 	const [appMessage, setAppMessage] = useState('');
