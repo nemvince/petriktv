@@ -5,17 +5,9 @@ import Loading from '../Queries/Loading';
 import QueryError from '../Queries/QueryError';
 import DepartureCard from './DepartureCard';
 import getBusDepartures from '../../utils/getBusDepartures';
+import { Departure } from '../../schema/types';
 
-interface BusDepartureProps {
-	stopId: string | string[];
-	routeFilter?: (string | null)[];
-	displayName: string;
-}
-const BusDeparture = ({
-	stopId,
-	routeFilter,
-	displayName,
-}: BusDepartureProps) => {
+const BusDeparture = ({ stopId, routeFilter, displayName }: Departure) => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['busDeparture', stopId],
 		retry() {

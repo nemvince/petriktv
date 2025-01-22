@@ -1,12 +1,16 @@
 import { relaunch } from '@tauri-apps/plugin-process';
 import { check } from '@tauri-apps/plugin-updater';
 import { useEffect, useState } from 'react';
+import {
+	APP_UPDATE_INTERVAL,
+	APP_UPDATE_MESSAGE_LIFETIME,
+} from '../lib/constants';
 
 const useUpdateApp = () => {
 	const [appMessage, setAppMessage] = useState('');
 
 	const updateApp = async () => {
-		setTimeout(() => setAppMessage(''), 5000);
+		setTimeout(() => setAppMessage(''), APP_UPDATE_MESSAGE_LIFETIME);
 
 		setAppMessage('Checking for updates...');
 		const update = await check();
@@ -40,16 +44,13 @@ const useUpdateApp = () => {
 
 	//Update every 60 minutes
 	useEffect(() => {
-		const interval = setInterval(
-			async () => {
-				const update = await check();
-				if (update) {
-					await update.downloadAndInstall();
-					relaunch();
-				}
-			},
-			60 * 60 * 1000,
-		);
+		const interval = setInterval(async () => {
+			const update = await check();
+			if (update) {
+				await update.downloadAndInstall();
+				relaunch();
+			}
+		}, APP_UPDATE_INTERVAL);
 		return () => clearInterval(interval);
 	}, []);
 
