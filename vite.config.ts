@@ -13,7 +13,6 @@ export default defineConfig(async () => ({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'src'),
-			'@tauri': path.resolve(__dirname, 'src-tauri'),
 		},
 	},
 
