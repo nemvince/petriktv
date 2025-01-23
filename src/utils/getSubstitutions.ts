@@ -32,6 +32,7 @@ const getSubstitutions = async () => {
 	});
 
 	// Sort the consolidated data by lesson
+	// put consolidated lessons to the end of starting lesson group
 	return currentSubstitutions.sort((a, b) => {
 		const lessonA =
 			typeof a.lesson === 'string'
@@ -42,6 +43,9 @@ const getSubstitutions = async () => {
 				? Number(b.lesson.split('-')[0])
 				: b.lesson;
 
+		if (lessonA === lessonB) {
+			return a.consolidated ? 1 : -1;
+		}
 		return lessonA - lessonB;
 	});
 };
