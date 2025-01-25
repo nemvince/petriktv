@@ -4,11 +4,10 @@ import TableCell from './TableCell';
 export type HeaderConfig = {
 	icon?: ReactNode;
 	title?: string;
-	headerCount: number;
 };
 
 type TableHeaderProps = {
-	headers: Omit<HeaderConfig, 'headerCount'>[];
+	headers: HeaderConfig[];
 };
 
 const TableHeader = ({ headers }: TableHeaderProps) => {
