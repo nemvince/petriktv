@@ -1,16 +1,8 @@
-import { ReactNode } from 'react';
+import useTable from '@/hooks/useTable';
 import TableCell from './TableCell';
 
-export type HeaderConfig = {
-	icon?: ReactNode;
-	title?: string;
-};
-
-type TableHeaderProps = {
-	headers: HeaderConfig[];
-};
-
-const TableHeader = ({ headers }: TableHeaderProps) => {
+const TableHeader = () => {
+	const { headers } = useTable();
 	return (
 		<header className='flex w-full flex-row items-center justify-between border-b border-petrik-3'>
 			{headers.map((header, idx) => (

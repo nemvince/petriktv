@@ -1,9 +1,4 @@
-import { TableData } from '@/schema/types';
-
-type TableBodyProps = {
-	currentData: TableData;
-};
-const TableBody = ({}: TableBodyProps) => {
+const TableBody = () => {
 	return <section>Body</section>;
 };
 
