@@ -19,7 +19,7 @@ const Table = ({ data, emptyStateMessage, headers }: TableProps) => {
 	const { currentData, currentPage, totalPages } = usePagination({ data });
 
 	return (
-		<section className=''>
+		<section className='h-full w-full rounded-lg'>
 			<TableHeader headers={headers} />
 			<TableBody currentData={currentData} />
 			<TableFooter
