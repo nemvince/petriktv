@@ -23,6 +23,8 @@ export type RoomSubstitutionResponse = {
 	terem: string;
 };
 
+export type TableData = Substitution[] | RoomSubstitutionEntry[];
+
 export type Departure = {
 	stopId: string | string[];
 	displayName: string;

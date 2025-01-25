@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCurrentPeriod } from '@/utils/periods';
+import { getCurrentPeriod, PeriodNumber } from '@/utils/periods';
 import { Substitution } from '@/schema/types';
 
 const getSubstitutions = async () => {
@@ -44,7 +44,7 @@ const getSubstitutions = async () => {
 				: b.lesson;
 
 		if (lessonA === lessonB) {
-			return a.consolidated ? 1 : -1;
+			return typeof a.lesson === 'string' ? 1 : -1;
 		}
 		return lessonA - lessonB;
 	});
@@ -55,7 +55,7 @@ const groupData = (data: any[]): Record<string, Substitution[]> =>
 	data.reduce((acc: Record<string, Substitution[]>, item: any) => {
 		const key = `${item.tname}-${item.class}`;
 		const transformedItem: Substitution = {
-			lesson: Number(item.ora.split('.')[0]),
+			lesson: Number(item.ora.split('.')[0]) as PeriodNumber,
 			teacher: item.tname,
 			missing: item.helytan,
 			className: item.class,
@@ -99,12 +99,12 @@ const consolidateData = (data: Substitution[]): Substitution[] => {
 				Number(lessonB.at(-1)),
 			);
 
-			const consolidatedLesson = `${lessonStart}-${lessonEnd}`;
+			const consolidatedLesson =
+				`${lessonStart}-${lessonEnd}` as `${PeriodNumber}-${PeriodNumber}`;
 
 			acc[key] = {
 				...existingItem,
 				lesson: consolidatedLesson,
-				consolidated: true,
 			};
 
 			return acc;

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import HeaderCell from './HeaderCell';
+import TableCell from './TableCell';
 
 export type HeaderConfig = {
 	icon?: ReactNode;
@@ -12,17 +12,18 @@ type TableHeaderProps = {
 };
 
 const TableHeader = ({ headers }: TableHeaderProps) => {
-	const headerCount = headers.length;
 	return (
-		<div className='flex-grow flex-row'>
+		<header className='flex w-full flex-row items-center justify-between'>
 			{headers.map((header, idx) => (
-				<HeaderCell
+				<TableCell
+					className={`gap-x-1 ${header.icon && header.title ? `w-1/${headers.length}` : `w-1/${headers.length + 1}`}`}
 					key={idx}
-					headerCount={headerCount}
-					{...header}
-				/>
+				>
+					<span>{header.icon}</span>
+					<span>{header.title}</span>
+				</TableCell>
 			))}
-		</div>
+		</header>
 	);
 };
 
