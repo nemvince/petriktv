@@ -7,7 +7,7 @@ type TableContextType = {
 	totalPages: number;
 	currentPage: number;
 	totalItems: number;
-	emptyMessage: string;
+	emptyMessage: string | null;
 };
 export const TableContext = createContext<TableContextType | undefined>(
 	undefined,

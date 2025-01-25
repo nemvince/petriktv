@@ -41,7 +41,8 @@ const TableProvider = ({
 				totalPages,
 				currentPage,
 				totalItems,
-				emptyMessage: emptyMessage || 'Nincs adat!',
+				emptyMessage:
+					data.length === 0 ? emptyMessage || 'Nincs adat!' : null,
 			}}
 		>
 			{children}
