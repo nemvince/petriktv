@@ -13,6 +13,7 @@ export default defineConfig(async () => ({
 	resolve: {
 		alias: {
 			'@': path.resolve(__dirname, 'src'),
+			'@c': path.resolve(__dirname, 'src/components'),
 		},
 	},
 

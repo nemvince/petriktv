@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { REFETCH_INTERVALS } from '@/lib/constants';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import Loading from '@/components/Queries/Loading';
-import QueryError from '@/components/Queries/QueryError';
-import AutoPaginatedTable from '@/components/AutoPaginatedTable/AutoPaginatedTable';
+import Loading from '@c/Queries/Loading';
+import QueryError from '@c/Queries/QueryError';
+import AutoPaginatedTable from '@c/AutoPaginatedTable/AutoPaginatedTable';
 import { RoomSubstitutionEntry } from '@/schema/types';
 import getRoomSubstitutions from '@/utils/getRoomSubstitutions';
 
