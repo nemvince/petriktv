@@ -28,3 +28,5 @@ export const DEPARTURES: Departure[] = [
 		displayName: 'Hősök tere felé',
 	},
 ] as const;
+
+export const ITEMS_PER_PAGE = 5 as const;

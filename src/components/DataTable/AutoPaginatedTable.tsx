@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react';
-import AnimatedPlaceholder from '@c/AutoPaginatedTable/AnimatedPlaceholder';
+import AnimatedPlaceholder from '@/components/DataTable/AnimatedPlaceholder';
 
 type HeaderConfig<T> = {
 	title?: string;
@@ -186,11 +186,9 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
 
 	if (props.data.length === 0) {
 		return (
-			<div className='flex h-full w-full flex-col items-center justify-center'>
-				<AnimatedPlaceholder
-					title={props.emptyStateMessage || 'Nincs adat!'}
-				/>
-			</div>
+			<AnimatedPlaceholder
+				title={props.emptyStateMessage || 'Nincs adat!'}
+			/>
 		);
 	}
 

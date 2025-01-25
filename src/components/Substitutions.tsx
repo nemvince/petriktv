@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import AutoPaginatedTable from '@c/AutoPaginatedTable/AutoPaginatedTable';
+import AutoPaginatedTable from '@c/DataTable/AutoPaginatedTable';
 import { Icon } from '@iconify/react';
 import { REFETCH_INTERVALS } from '@/lib/constants';
 import Loading from '@c/Queries/Loading';
 import QueryError from '@c/Queries/QueryError';
 import getSubstitutions from '@/utils/getSubstitutions';
+import { Substitution } from '@/schema/types';
 
 const Substitutions = () => {
 	const { data, isLoading, error } = useQuery({
@@ -60,7 +61,7 @@ const Substitutions = () => {
 				},
 			]}
 			emptyStateMessage='Nincs helyettesítés!'
-			data={data || []}
+			data={data as Substitution[]}
 			tableHeight={438}
 			cycleInterval={5000}
 		/>

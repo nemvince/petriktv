@@ -3,7 +3,7 @@ import { REFETCH_INTERVALS } from '@/lib/constants';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Loading from '@c/Queries/Loading';
 import QueryError from '@c/Queries/QueryError';
-import AutoPaginatedTable from '@c/AutoPaginatedTable/AutoPaginatedTable';
+import AutoPaginatedTable from '@c/DataTable/AutoPaginatedTable';
 import { RoomSubstitutionEntry } from '@/schema/types';
 import getRoomSubstitutions from '@/utils/getRoomSubstitutions';
 
@@ -19,7 +19,7 @@ const RoomSubstitution = () => {
 
 	return (
 		<AutoPaginatedTable
-			data={data as RoomSubstitutionEntry[] | []}
+			data={data as RoomSubstitutionEntry[]}
 			header={[
 				{
 					icon: <Icon icon='mdi:clock' />,
