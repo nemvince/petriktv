@@ -1,6 +1,6 @@
 import '@/App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Header from '@c/Header';
+import Header from '@c/Header/Header';
 import Substitutions from '@c/Substitutions';
 import RoomSubstitution from '@c/RoomSubstitution';
 import Weather from '@c/Weather';
