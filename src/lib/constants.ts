@@ -1,17 +1,20 @@
 import { Departure } from '@/schema/types';
 
 export const REFETCH_INTERVALS = {
-	substitutions: 30 * 1000,
-	roomSubtitutions: 60 * 1000,
-	news: 2 * 60 * 1000,
-	busDepartures: 30 * 1000,
-	weather: 10 * 60 * 1000,
+	substitutions: 30000,
+	roomSubtitutions: 60000,
+	news: 120000,
+	busDepartures: 30000,
+	weather: 600000,
 } as const;
 
-export const APP_UPDATE_INTERVAL = 30 * 60 * 1000;
-export const APP_UPDATE_MESSAGE_LIFETIME = 5 * 1000;
-
 export const PETRIK_LOCATION = '47.50535837979173, 19.090123083749727' as const;
+
+export const APP_UPDATE_INTERVAL = 1800000 as const;
+export const APP_UPDATE_MESSAGE_LIFETIME = 5000 as const;
+
+export const CYCLE_INTERVAL = 5000 as const;
+export const ITEMS_PER_PAGE = 5 as const;
 
 export const DEPARTURES: Departure[] = [
 	{
@@ -28,5 +31,3 @@ export const DEPARTURES: Departure[] = [
 		displayName: 'Hősök tere felé',
 	},
 ] as const;
-
-export const ITEMS_PER_PAGE = 5 as const;

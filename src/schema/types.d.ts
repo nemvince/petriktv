@@ -1,4 +1,5 @@
 import { PeriodNumber } from '@/utils/periods';
+import { ReactNode } from 'react';
 
 export type Substitution = {
 	lesson: `${PeriodNumber}-${PeriodNumber}` | PeriodNumber;
@@ -24,6 +25,12 @@ export type RoomSubstitutionResponse = {
 };
 
 export type TableData = Substitution[] | RoomSubstitutionEntry[];
+
+export type HeaderConfig = {
+	icon?: ReactNode;
+	title?: string;
+	headerKey: keyof (Substitution | RoomSubstitutionEntry);
+};
 
 export type Departure = {
 	stopId: string | string[];
