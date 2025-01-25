@@ -1,5 +1,7 @@
+import { PeriodNumber } from '@/utils/periods';
+
 export type Substitution = {
-	lesson: string | number;
+	lesson: `${PeriodNumber}-${PeriodNumber}` | PeriodNumber;
 	teacher: string;
 	missing: string;
 	className: string;

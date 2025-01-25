@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useRef, useState } from 'react';
-import AnimatedPlaceholder from '@/components/AutoPaginatedTable/AnimatedPlaceholder';
+import AnimatedPlaceholder from '@c/AutoPaginatedTable/AnimatedPlaceholder';
 
 type HeaderConfig<T> = {
 	title?: string;

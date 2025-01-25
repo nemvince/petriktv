@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { Icon } from '@iconify/react';
 import { REFETCH_INTERVALS } from '@/lib/constants';
-import Loading from '@/components/Queries/Loading';
-import QueryError from '@/components/Queries/QueryError';
+import Loading from '@c/Queries/Loading';
+import QueryError from '@c/Queries/QueryError';
 import getBusDepartures from '@/utils/getBusDepartures';
 import { Departure } from '@/schema/types';
-import DepartureCard from '@/components/BusDeparture/DepartureCard';
+import DepartureCard from '@c/BusDeparture/DepartureCard';
 
 const BusDeparture = ({ stopId, routeFilter, displayName }: Departure) => {
 	const { data, isLoading, error } = useQuery({

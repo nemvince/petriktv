@@ -1,10 +1,10 @@
 import '@/App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Header from '@/components/Header';
-import Substitutions from '@/components/Substitutions';
-import RoomSubstitution from '@/components/RoomSubstitution';
-import Weather from '@/components/Weather';
-import DepartureContainer from '@/components/BusDeparture/DepartureContainer';
+import Header from '@c/Header';
+import Substitutions from '@c/Substitutions';
+import RoomSubstitution from '@c/RoomSubstitution';
+import Weather from '@c/Weather';
+import DepartureContainer from '@c/BusDeparture/DepartureContainer';
 import useUpdateApp from '@/hooks/useUpdateApp';
 
 const queryClient = new QueryClient();

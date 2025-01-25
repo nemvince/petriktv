@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import Marquee from 'react-fast-marquee';
-import Loading from '@/components/Queries/Loading';
-import QueryError from '@/components/Queries/QueryError';
+import Loading from '@c/Queries/Loading';
+import QueryError from '@c/Queries/QueryError';
 import { REFETCH_INTERVALS } from '@/lib/constants';
 import getNews from '@/utils/getNews';
 

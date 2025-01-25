@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import News from '@/components/News';
+import News from '@c/News';
 import useAppVersion from '@/hooks/useAppVersion';
 import useClock from '@/hooks/useClock';
 
