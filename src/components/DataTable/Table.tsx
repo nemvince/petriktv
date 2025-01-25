@@ -8,7 +8,7 @@ import usePagination from '@/hooks/usePagination';
 type TableProps = {
 	emptyStateMessage?: string;
 	data: TableData;
-	headers: Omit<HeaderConfig, 'headerCount'>[];
+	headers: HeaderConfig[];
 };
 const Table = ({ data, emptyStateMessage, headers }: TableProps) => {
 	if (data.length === 0) {
