@@ -5,7 +5,7 @@ import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 export type TableContextType = {
 	headers: HeaderConfig[];
-	data: TableData;
+	data: TableData[];
 	totalPages: number;
 	currentPage: number;
 	totalItems: number;
@@ -13,7 +13,7 @@ export type TableContextType = {
 };
 
 type TableProviderProps = PropsWithChildren & {
-	data: TableData;
+	data: TableData[];
 	headers: HeaderConfig[];
 	emptyMessage?: string;
 };

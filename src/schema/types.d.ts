@@ -33,7 +33,7 @@ export type RoomSubstitutionResponse = {
 	terem: string;
 };
 
-export type TableData = Substitution[] | RoomSubstitution[];
+export type TableData = Substitution | RoomSubstitution;
 
 export type HeaderConfig = {
 	icon?: ReactNode;
