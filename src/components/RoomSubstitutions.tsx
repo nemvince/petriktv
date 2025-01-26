@@ -3,11 +3,12 @@ import { REFETCH_INTERVALS } from '@/lib/constants';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import Loading from '@c/Queries/Loading';
 import QueryError from '@c/Queries/QueryError';
-import AutoPaginatedTable from '@c/DataTable/AutoPaginatedTable';
-import { RoomSubstitutionEntry } from '@/schema/types';
+import { RoomSubstitution } from '@/schema/types';
 import getRoomSubstitutions from '@/utils/getRoomSubstitutions';
+import TableProvider from '@/contexts/TableContext';
+import Table from '@c/DataTable/Table';
 
-const RoomSubstitution = () => {
+const RoomSubstitutions = () => {
 	const { data, isLoading, error } = useQuery({
 		queryKey: ['roomSubstitution'],
 		queryFn: getRoomSubstitutions,
@@ -18,36 +19,36 @@ const RoomSubstitution = () => {
 	if (error) return <QueryError />;
 
 	return (
-		<AutoPaginatedTable
-			data={data as RoomSubstitutionEntry[]}
-			header={[
+		<TableProvider
+			emptyMessage='Nincs teremcsere!'
+			data={data as RoomSubstitution[]}
+			headers={[
 				{
-					icon: <Icon icon='mdi:clock' />,
-					addClasses: 'w-12',
-					center: true,
-					key: 'lesson',
+					icon: (
+						<Icon
+							icon='mdi:clock'
+							className='h-5 w-5'
+						/>
+					),
+					headerKey: 'lesson',
 				},
 				{
 					title: 'Honnan',
-					key: 'from',
-					center: false,
+					headerKey: 'from',
 				},
 				{
 					title: 'Hova',
-					key: 'to',
-					center: false,
+					headerKey: 'to',
 				},
 				{
 					title: 'Osztály',
-					key: 'class',
+					headerKey: 'className',
 				},
 			]}
-			emptyStateMessage='Nincs teremcsere!'
-			cycleInterval={5000}
-			tableHeight={197}
-			headerHeight={10}
-		/>
+		>
+			<Table />
+		</TableProvider>
 	);
 };
 
-export default RoomSubstitution;
+export default RoomSubstitutions;

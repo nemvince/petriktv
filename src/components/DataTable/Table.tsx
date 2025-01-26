@@ -9,7 +9,7 @@ const Table = () => {
 	if (emptyMessage) return <AnimatedPlaceholder title={emptyMessage} />;
 
 	return (
-		<section className='h-full w-full rounded-lg'>
+		<section className='flex h-full w-full flex-col rounded-lg'>
 			<TableHeader />
 			<TableBody />
 			<TableFooter />

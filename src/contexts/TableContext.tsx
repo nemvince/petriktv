@@ -1,7 +1,16 @@
 import { TableContext } from '@/hooks/useTable';
-import { CYCLE_INTERVAL, ITEMS_PER_PAGE } from '@/lib/constants';
+import { CYCLE_INTERVAL, SUBS_PER_PAGE, ROOMS_PER_PAGE } from '@/lib/constants';
 import { HeaderConfig, TableData } from '@/schema/types';
 import { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+
+export type TableContextType = {
+	headers: HeaderConfig[];
+	data: TableData;
+	totalPages: number;
+	currentPage: number;
+	totalItems: number;
+	emptyMessage: string | null;
+};
 
 type TableProviderProps = PropsWithChildren & {
 	data: TableData;
@@ -14,24 +23,32 @@ const TableProvider = ({
 	headers,
 	emptyMessage,
 }: TableProviderProps) => {
+	const ITEMS_PER_PAGE = useMemo(() => {
+		const headerKeys = headers.map((header) => header.headerKey);
+		if ('consolidated' in headerKeys) return SUBS_PER_PAGE;
+		else return ROOMS_PER_PAGE;
+	}, [headers]);
 	const totalItems = useMemo(() => data.length, [data]);
-	const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+	const totalPages = useMemo(
+		() => (totalItems === 0 ? 1 : Math.ceil(totalItems / ITEMS_PER_PAGE)),
+		[totalItems],
+	);
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentData = useMemo(() => {
-		if (data.length === 0) return [];
+		if (totalItems === 0) return [];
 
 		const start = (currentPage - 1) * ITEMS_PER_PAGE;
 		const end = start + ITEMS_PER_PAGE;
 		return data.slice(start, end);
-	}, [currentPage, data]);
+	}, [currentPage, totalItems, data]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentPage((prev) => (prev % totalPages) + 1);
 		}, CYCLE_INTERVAL);
 		return () => clearInterval(interval);
-	}, [totalPages]);
+	}, [totalPages, data]);
 
 	return (
 		<TableContext.Provider

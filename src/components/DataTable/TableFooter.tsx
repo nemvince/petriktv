@@ -3,11 +3,11 @@ import useTable from '@/hooks/useTable';
 const TableFooter = () => {
 	const { currentPage, totalPages, totalItems } = useTable();
 	return (
-		<footer className='mx-4 mt-2 flex h-5 max-h-5 items-center justify-between'>
+		<footer className='flex h-fit max-h-fit items-center justify-between border-t border-petrik-3 px-4 py-2'>
 			<span>Összesen: {totalItems}</span>
 			{totalPages > 1 && (
 				<span className='font-bold'>
-					{currentPage + 1}/{totalPages}
+					{currentPage}/{totalPages}
 				</span>
 			)}
 		</footer>

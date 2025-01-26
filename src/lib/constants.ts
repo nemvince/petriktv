@@ -14,7 +14,8 @@ export const APP_UPDATE_INTERVAL = 1800000 as const;
 export const APP_UPDATE_MESSAGE_LIFETIME = 5000 as const;
 
 export const CYCLE_INTERVAL = 5000 as const;
-export const ITEMS_PER_PAGE = 5 as const;
+export const SUBS_PER_PAGE = 6 as const;
+export const ROOMS_PER_PAGE = 4 as const;
 
 export const DEPARTURES: Departure[] = [
 	{

@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import AutoPaginatedTable from '@c/DataTable/AutoPaginatedTable';
 import { Icon } from '@iconify/react';
 import { REFETCH_INTERVALS } from '@/lib/constants';
 import Loading from '@c/Queries/Loading';
 import QueryError from '@c/Queries/QueryError';
 import getSubstitutions from '@/utils/getSubstitutions';
 import { Substitution } from '@/schema/types';
+import TableProvider from '@/contexts/TableContext';
+import Table from './DataTable/Table';
 
 const Substitutions = () => {
 	const { data, isLoading, error } = useQuery({
@@ -18,53 +19,59 @@ const Substitutions = () => {
 	if (error) return <QueryError />;
 
 	return (
-		<AutoPaginatedTable
-			header={[
+		<TableProvider
+			emptyMessage='Nincs helyettesítés!'
+			data={data as Substitution[]}
+			headers={[
 				{
-					icon: <Icon icon='mdi:clock' />,
-					addClasses: 'w-12',
-					center: true,
-					key: 'lesson',
+					icon: (
+						<Icon
+							icon='mdi:clock'
+							className='h-5 w-5'
+						/>
+					),
+					headerKey: 'lesson',
 				},
 				{
 					title: 'Tanár',
 					icon: <Icon icon='mdi:account' />,
-					key: 'teacher',
+					headerKey: 'teacher',
 				},
 				{
 					title: 'Helyettes',
 					icon: <Icon icon='mdi:account-group' />,
-					key: 'missing',
+					headerKey: 'missing',
 				},
 				{
 					title: 'Osztály',
 					icon: <Icon icon='mdi:school' />,
-					key: 'className',
+					headerKey: 'className',
 				},
 				{
 					title: 'Terem',
 					icon: <Icon icon='mdi:location' />,
-					key: 'classroom',
+					headerKey: 'classroom',
 				},
 				{
 					title: 'ÖVH',
-					addClasses: 'font-bold text-sm',
-					key: 'consolidated',
+					headerKey: 'consolidated',
 					render: (value: boolean) =>
 						value ? (
-							<div className='flex items-center justify-center'>
-								<Icon icon='mdi:check' />
-							</div>
+							<Icon
+								icon='mdi:check'
+								className='h-[1.5em] w-[1.5em]'
+							/>
 						) : (
-							''
+							<Icon
+								icon='mdi:close'
+								className='h-[1.5em] w-[1.5em]'
+							/>
 						),
 				},
 			]}
-			emptyStateMessage='Nincs helyettesítés!'
-			data={data as Substitution[]}
-			tableHeight={438}
-			cycleInterval={5000}
-		/>
+		>
+			<Table />
+		</TableProvider>
 	);
 };
 

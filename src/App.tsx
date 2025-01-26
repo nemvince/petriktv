@@ -2,7 +2,7 @@ import '@/App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from '@c/Header/Header';
 import Substitutions from '@c/Substitutions';
-import RoomSubstitution from '@c/RoomSubstitution';
+import RoomSubstitutions from '@c/RoomSubstitutions';
 import Weather from '@c/Weather';
 import DepartureContainer from '@c/BusDeparture/DepartureContainer';
 import useUpdateApp from '@/hooks/useUpdateApp';
@@ -18,7 +18,6 @@ function App() {
 				<div className='box mx-2 mb-2 flex flex-row justify-between p-1 px-2.5'>
 					<Header message={appMessage} />
 				</div>
-
 				<div className='mx-1.5 grid flex-grow grid-cols-3 gap-1.5'>
 					<div className='col-span-1 grid grid-rows-4 gap-1.5'>
 						<div className='box grid grid-rows-3'>
@@ -30,7 +29,7 @@ function App() {
 						</div>
 
 						<div className='box row-span-2'>
-							<RoomSubstitution />
+							<RoomSubstitutions />
 						</div>
 					</div>
 
