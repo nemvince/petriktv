@@ -4,7 +4,7 @@ import TableCell from './TableCell';
 import { TableData } from '@/schema/types';
 
 type DataRowProps<T> = {
-	data: T;
+	data: T extends TableData ? T : never;
 	rowNumber: number;
 };
 
