@@ -1,14 +1,6 @@
-import { HeaderConfig, TableData } from '@/schema/types';
+import { TableContextType } from '@/contexts/TableContext';
 import { createContext, useContext } from 'react';
 
-type TableContextType = {
-	headers: HeaderConfig[];
-	data: TableData;
-	totalPages: number;
-	currentPage: number;
-	totalItems: number;
-	emptyMessage: string | null;
-};
 export const TableContext = createContext<TableContextType | undefined>(
 	undefined,
 );

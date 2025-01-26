@@ -1,24 +1,30 @@
-import { ITEMS_PER_PAGE } from '@/lib/constants';
-import { RoomSubstitutionEntry, Substitution } from '@/schema/types';
+import useTable from '@/hooks/useTable';
 import { useMemo } from 'react';
+import TableCell from './TableCell';
+import { TableData } from '@/schema/types';
 
-type DataRowProps = {
-	data: Substitution | RoomSubstitutionEntry;
+type DataRowProps<T> = {
+	data: T;
 	rowNumber: number;
 };
-const DataRow = ({ rowNumber }: DataRowProps) => {
-	const height = useMemo(() => {
-		return `h-1/${ITEMS_PER_PAGE} max-h-1/${ITEMS_PER_PAGE}`;
-	}, [ITEMS_PER_PAGE]);
+
+const DataRow = <T extends TableData>({ rowNumber, data }: DataRowProps<T>) => {
+	const { headers } = useTable();
 	const bgColor = useMemo(() => {
-		return rowNumber % 2 == 0 ? 'bg-opacity-20' : 'bg-opacity-0';
+		return rowNumber % 2 == 0 ? 'bg-opacity-0' : 'bg-opacity-20';
 	}, [rowNumber]);
 
 	return (
 		<div
-			className={`flex items-center justify-between border-b border-petrik-3 bg-black last:border-opacity-80 ${bgColor} ${height}`}
+			className={`flex h-fit flex-grow items-center justify-between border-b border-petrik-3 bg-black last:border-opacity-80 ${bgColor} `}
 		>
-			DataRow
+			{headers.map((header, colIndex) => (
+				<TableCell key={colIndex}>
+					{header.render
+						? header.render(data[header.headerKey as keyof T])
+						: (data[header.headerKey as keyof T] as string)}
+				</TableCell>
+			))}
 		</div>
 	);
 };

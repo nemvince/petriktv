@@ -10,11 +10,20 @@ export type Substitution = {
 	consolidated: boolean;
 };
 
-export type RoomSubstitutionEntry = {
-	lesson: PeriodNumber;
+export type SubstitutionResponse = {
+	ora: `${PeriodNumber}.óra`;
+	tname: string;
+	helytan: string;
+	class: string;
+	terem: string;
+	ovh: '0' | '1';
+};
+
+export type RoomSubstitution = {
+	lesson: `${PeriodNumber}-${PeriodNumber}` | PeriodNumber;
 	from: string;
 	to: string;
-	class: string;
+	className: string;
 };
 
 export type RoomSubstitutionResponse = {
@@ -24,12 +33,13 @@ export type RoomSubstitutionResponse = {
 	terem: string;
 };
 
-export type TableData = Substitution[] | RoomSubstitutionEntry[];
+export type TableData = Substitution[] | RoomSubstitution[];
 
 export type HeaderConfig = {
 	icon?: ReactNode;
 	title?: string;
-	headerKey: keyof (Substitution | RoomSubstitutionEntry);
+	headerKey: keyof Substitution | keyof RoomSubstitution;
+	render?: (value: any) => ReactNode;
 };
 
 export type Departure = {
