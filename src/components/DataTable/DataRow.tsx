@@ -16,7 +16,7 @@ const DataRow = <T extends TableData>({ rowNumber, data }: DataRowProps<T>) => {
 
 	return (
 		<div
-			className={`flex h-fit flex-grow items-center justify-between border-b border-petrik-3 bg-black last:border-opacity-80 ${bgColor} `}
+			className={`flex h-full flex-grow items-center justify-between border-b border-petrik-3 bg-black last:border-opacity-80 ${bgColor} `}
 		>
 			{headers.map((header, colIndex) => (
 				<TableCell key={colIndex}>
