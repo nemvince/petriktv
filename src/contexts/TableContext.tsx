@@ -23,24 +23,19 @@ const TableProvider = ({
 	headers,
 	emptyMessage,
 }: TableProviderProps) => {
-	const ITEMS_PER_PAGE = useMemo(() => {
-		const headerKeys = headers.map((header) => header.headerKey);
-		if ('consolidated' in headerKeys) return SUBS_PER_PAGE;
-		else return ROOMS_PER_PAGE;
-	}, [headers]);
-	const totalItems = useMemo(() => data.length, [data]);
+	const ITEMS_PER_PAGE = useMemo(() => headers.find(h => h.headerKey === 'consolidated') ? SUBS_PER_PAGE : ROOMS_PER_PAGE, [headers]);
+    const totalItems = useMemo(() => data.length, [data]);
 	const totalPages = useMemo(
 		() => (totalItems === 0 ? 1 : Math.ceil(totalItems / ITEMS_PER_PAGE)),
-		[totalItems],
+		[totalItems, ITEMS_PER_PAGE],
 	);
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const currentData = useMemo(() => {
 		if (totalItems === 0) return [];
-
-		const start = (currentPage - 1) * ITEMS_PER_PAGE;
-		const end = start + ITEMS_PER_PAGE;
-		return data.slice(start, end);
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end = Math.min(start + ITEMS_PER_PAGE, totalItems);
+        return data.slice(start, end);
 	}, [currentPage, totalItems, data]);
 
 	useEffect(() => {
