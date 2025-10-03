@@ -4,6 +4,7 @@ import { PETRIK_LOCATION, REFETCH_INTERVALS } from '@/lib/constants';
 import Loading from '@/components/Queries/Loading';
 import QueryError from '@/components/Queries/QueryError';
 import getWeather from '@/utils/getWeather';
+import { getWindType } from '@/utils/getWeather';
 
 const Weather = () => {
 	const { data, isLoading, error } = useQuery({
@@ -16,7 +17,7 @@ const Weather = () => {
 	if (error) return <QueryError />;
 
 	return (
-		<div className='mx-4 flex h-full flex-row items-center justify-between p-3'>
+		<div className='mx-4 flex h-full flex-row items-center justify-between py-2'>
 			<div className='flex items-center justify-center'>
 				<img
 					src={data.current.condition.icon}
@@ -32,8 +33,9 @@ const Weather = () => {
 						icon='mdi:weather-windy'
 						className='text-2xl'
 					/>
-					<span className='self-center text-lg'>
-						{data.current.wind_kph} km/h
+					<span className='text-md self-center'>
+						{getWindType(data.current.wind_kph)?.name ||
+							`${data.current.wind_kph} km/h`}
 					</span>
 				</div>
 				<div className='flex gap-2'>
