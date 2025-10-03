@@ -1,4 +1,14 @@
 import axios from 'axios';
+import windTypes from '@/assets/windTypes.json' assert { type: 'json' };
+
+export type WindType = (typeof windTypes)[number];
+
+export const getWindType = (kph: number) => {
+	return (
+		windTypes.find((type) => kph >= type.kph.min && kph <= type.kph.max) ||
+		null
+	);
+};
 
 const getWeather = async (location: `${number},${number}`) => {
 	const { data } = await axios.get(
