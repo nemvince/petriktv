@@ -16,52 +16,52 @@
 	},
 	{
 		"id": 3,
-		"name": "Gyenge szellő",
+		"name": "Gyengéd fuvallat",
 		"kph": { "min": 12, "max": 19 }
 	},
 	{
 		"id": 4,
-		"name": "Mérsékelt szellő",
+		"name": "Mérsékelt szél",
 		"kph": { "min": 20, "max": 28 }
 	},
 	{
 		"id": 5,
-		"name": "Friss szél",
+		"name": "Frissítő szellő",
 		"kph": { "min": 29, "max": 38 }
 	},
 	{
 		"id": 6,
-		"name": "Élénk szél",
+		"name": "Eleven szellő",
 		"kph": { "min": 39, "max": 49 }
 	},
 	{
 		"id": 7,
-		"name": "Erős szél",
+		"name": "Izmos szél",
 		"kph": { "min": 50, "max": 61 }
 	},
 	{
 		"id": 8,
-		"name": "Viharos szél",
+		"name": "Majdnem vihar",
 		"kph": { "min": 62, "max": 74 }
 	},
 	{
 		"id": 9,
-		"name": "Erősen viharos szél",
+		"name": "Csak vihar",
 		"kph": { "min": 75, "max": 87 }
 	},
 	{
 		"id": 10,
-		"name": "Vihar",
+		"name": "Esernyő tolvaj",
 		"kph": { "min": 88, "max": 102 }
 	},
 	{
 		"id": 11,
-		"name": "Heves vihar",
+		"name": "Fékezhetetlen vihar",
 		"kph": { "min": 103, "max": 117 }
 	},
 	{
 		"id": 12,
-		"name": "Hurrikán erejű szél",
+		"name": "Armageddon",
 		"kph": { "min": 118, "max": 999 }
 	}
 ]
