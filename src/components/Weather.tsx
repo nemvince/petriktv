@@ -17,13 +17,13 @@ const Weather = () => {
 	if (error) return <QueryError />;
 
 	return (
-		<div className='mx-4 flex h-full flex-row items-center justify-between py-2'>
+		<div className='mx-3 flex h-full flex-row items-center justify-between py-2'>
 			<div className='flex items-center justify-center'>
 				<img
 					src={data.current.condition.icon}
 					className='h-16 w-16'
 				/>
-				<span className='self-center text-lg font-bold'>
+				<span className='self-center text-nowrap text-lg font-bold'>
 					{data.current.temp_c} °C
 				</span>
 			</div>
@@ -33,7 +33,7 @@ const Weather = () => {
 						icon='mdi:weather-windy'
 						className='text-2xl'
 					/>
-					<span className='text-md self-center'>
+					<span className='text-md self-center text-nowrap'>
 						{getWindType(data.current.wind_kph)?.name ||
 							`${data.current.wind_kph} km/h`}
 					</span>
