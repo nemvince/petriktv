@@ -4,6 +4,7 @@ import windTypes from '@/assets/windTypes.json' assert { type: 'json' };
 export type WindType = (typeof windTypes)[number];
 
 export const getWindType = (kph: number) => {
+	kph = Math.round(kph);
 	return (
 		windTypes.find((type) => kph >= type.kph.min && kph <= type.kph.max) ||
 		null
