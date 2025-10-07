@@ -20,14 +20,8 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - name: install pnpm
-              uses: pnpm/action-setup@v4
-
-            - name: setup node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: lts/*
-                  cache: 'pnpm' # Set this to npm, yarn or pnpm.
+            - name: install bun
+              uses: oven-sh/setup-bun@v2
 
             - name: install Rust stable
               uses: dtolnay/rust-toolchain@stable
@@ -40,7 +34,7 @@ jobs:
                   workspaces: './src-tauri -> target'
 
             - name: install frontend dependencies
-              run: pnpm install
+              run: bun install
 
             - name: get environment variables into .env
               run: echo VITE_BKK_KEY=${{ secrets.BKK_KEY }} > .env && echo VITE_WEATHER_KEY=${{ secrets.WEATHER_KEY }} >> .env
