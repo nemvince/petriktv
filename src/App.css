@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@theme {
+	--color-petrik-1: #41988a;
+	--color-petrik-2: #718935;
+	--color-petrik-3: #99b18b;
+}
 
 @font-face {
 	font-family: 'Host Grotesk';
@@ -22,7 +26,8 @@ main {
 }
 
 .box {
-	@apply rounded-lg bg-black bg-opacity-30 shadow-lg;
+	@apply rounded-lg shadow-lg;
+	background: rgba(0,0,0, 0.3);
 }
 
 .text-shadow {

@@ -1,0 +1,55 @@
+name: 'publish'
+
+on:
+    push:
+        branches:
+            - dev
+
+jobs:
+    publish-tauri:
+        permissions:
+            contents: write
+        strategy:
+            fail-fast: false
+            matrix:
+                settings:
+                    - platform: 'windows-latest'
+                      args: ''
+
+        runs-on: ${{ matrix.settings.platform }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: install bun
+              uses: oven-sh/setup-bun@v2
+
+            - name: install Rust stable
+              uses: dtolnay/rust-toolchain@stable
+              with:
+                  targets: ${{ matrix.settings.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+            - name: Rust cache
+              uses: swatinem/rust-cache@v2
+              with:
+                  workspaces: './src-tauri -> target'
+
+            - name: install frontend dependencies
+              run: bun install
+
+            - name: get environment variables into .env
+              run: echo VITE_BKK_KEY=${{ secrets.BKK_KEY }} > .env && echo VITE_WEATHER_KEY=${{ secrets.WEATHER_KEY }} >> .env
+
+            - name: Build Tauri app
+              uses: tauri-apps/tauri-action@v0
+              env:
+                  CI: true
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+                  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+              with:
+                  # tauri-action replaces \_\_VERSION\_\_ with the app version
+                  # tagName: ${{ github.ref_name }}
+                  releaseName: 'v__VERSION__-dev'
+                  tagName: 'v__VERSION__-dev'
+                  releaseDraft: true
+                  prerelease: true

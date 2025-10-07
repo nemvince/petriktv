@@ -227,7 +227,7 @@ function AutoPaginatedTable<T>(props: AutoPaginatedTableProps<T>) {
 								ref={(el) => {
 									rowRefs.current[index] = el;
 								}}
-								className={`border-b border-petrik-3 bg-black last:border-opacity-80 ${index % 2 == 0 ? 'bg-opacity-20' : 'bg-opacity-0'}`}
+								className={`border-b border-petrik-3 last:border-petrik-3/80 ${index % 2 == 0 ? 'bg-black/20' : 'bg-transparent'}`}
 							>
 								{props.header.map((header, colIndex) => (
 									<td
