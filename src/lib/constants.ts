@@ -8,6 +8,16 @@ export const REFETCH_INTERVALS = {
 	weather: 10 * 60 * 1000,
 } as const;
 
+export const TABLE = {
+	substitutions: {
+		pageSize: 6,
+	},
+	roomSubstitutions: {
+		pageSize: 3,
+	},
+	cycleInterval: 5000,
+} as const;
+
 export const APP_UPDATE_INTERVAL = 30 * 60 * 1000;
 export const APP_UPDATE_MESSAGE_LIFETIME = 5 * 1000;
 
