@@ -1,0 +1,284 @@
+---
+# ==============================================================================
+# Kiosk Setup Playbook
+# ==============================================================================
+# Sets up:
+#   - admin user with sudo + SSH key auth
+#   - autologin on TTY1
+#   - Cage Wayland compositor as a kiosk session
+#   - Latest petriktv .deb from GitHub releases running fullscreen
+#
+# Usage:
+#   ansible-playbook kiosk-setup.yml -i inventory.ini \
+#     --extra-vars "ssh_public_key='ssh-ed25519 AAAA... user@host'"
+#
+# Required variables (set here or pass via --extra-vars / group_vars):
+# ==============================================================================
+
+- name: Kiosk machine setup
+  hosts: kiosk
+  become: true
+
+  vars:
+    # ── User ──────────────────────────────────────────────────────────────────
+    kiosk_user: admin
+    kiosk_user_shell: /bin/bash
+    # Pass your real key via --extra-vars or inventory; this is a placeholder.
+
+    # ── GitHub release source ─────────────────────────────────────────────────
+    # latest.json is published by Tauri's updater and always reflects the newest release.
+    # No API token needed, no rate limits.
+    deb_download_dest: "/tmp/petriktv_latest.deb"
+
+    # ── Kiosk binary ─────────────────────────────────────────────────────────
+    kiosk_binary: /usr/bin/petriktv
+
+    # ── Autologin target TTY ──────────────────────────────────────────────────
+    autologin_tty: tty1
+
+  # ============================================================================
+  tasks:
+
+    # --------------------------------------------------------------------------
+    # 1. Admin user
+    # --------------------------------------------------------------------------
+    - name: Create admin user
+      ansible.builtin.user:
+        name: "{{ kiosk_user }}"
+        shell: "{{ kiosk_user_shell }}"
+        groups: sudo
+        append: true
+        create_home: true
+        state: present
+
+    - name: Allow admin passwordless sudo
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/{{ kiosk_user }}"
+        content: "{{ kiosk_user }} ALL=(ALL) NOPASSWD:ALL\n"
+        owner: root
+        group: root
+        mode: "0440"
+        validate: "visudo -cf %s"
+
+    - name: Ensure .ssh directory exists for admin
+      ansible.builtin.file:
+        path: "/home/{{ kiosk_user }}/.ssh"
+        state: directory
+        owner: "{{ kiosk_user }}"
+        group: "{{ kiosk_user }}"
+        mode: "0700"
+
+    - name: Install authorised SSH public key
+      ansible.builtin.authorized_key:
+        user: "{{ kiosk_user }}"
+        key: "{{ ssh_public_key }}"
+        state: present
+        exclusive: false
+
+    # --------------------------------------------------------------------------
+    # 2. Harden SSH (optional but recommended for kiosks)
+    # --------------------------------------------------------------------------
+    - name: Disable SSH password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart sshd
+
+    - name: Permit root login via SSH (set to no)
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart sshd
+
+    # --------------------------------------------------------------------------
+    # 3. Install dependencies
+    # --------------------------------------------------------------------------
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - cage               # minimal Wayland kiosk compositor
+          - xwayland           # needed by some Electron / X11 apps inside Wayland
+          - curl
+          - jq
+          - libinput-tools
+          - udev
+        state: present
+        update_cache: true
+
+    # --------------------------------------------------------------------------
+    # 4. Autologin on TTY1 via systemd-getty override
+    # --------------------------------------------------------------------------
+    - name: Create getty override directory
+      ansible.builtin.file:
+        path: "/etc/systemd/system/getty@{{ autologin_tty }}.service.d"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Write autologin override for getty
+      ansible.builtin.copy:
+        dest: "/etc/systemd/system/getty@{{ autologin_tty }}.service.d/autologin.conf"
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          [Service]
+          ExecStart=
+          ExecStart=-/sbin/agetty --autologin {{ kiosk_user }} --noclear %I $TERM
+      notify: Reload systemd
+
+    # --------------------------------------------------------------------------
+    # 5. Auto-start the kiosk session on login (via .bash_profile)
+    # --------------------------------------------------------------------------
+    - name: Write .bash_profile to launch cage session on TTY1 login
+      ansible.builtin.copy:
+        dest: "/home/{{ kiosk_user }}/.bash_profile"
+        owner: "{{ kiosk_user }}"
+        group: "{{ kiosk_user }}"
+        mode: "0644"
+        content: |
+          # Source .bashrc if it exists
+          [[ -f ~/.bashrc ]] && . ~/.bashrc
+
+          # Launch kiosk only on TTY1, not over SSH or other TTYs
+          if [[ "$(tty)" == "/dev/{{ autologin_tty }}" ]]; then
+            exec cage -- {{ kiosk_binary }}
+          fi
+
+    # --------------------------------------------------------------------------
+    # 6. Fetch latest petriktv .deb via Tauri's latest.json
+    # --------------------------------------------------------------------------
+    - name: Fetch latest.json from GitHub releases
+      ansible.builtin.uri:
+        url: "https://github.com/{{ github_repo }}/releases/latest/download/latest.json"
+        method: GET
+        return_content: true
+      register: gh_latest
+      retries: 3
+      delay: 5
+
+    - name: Parse latest.json content
+      ansible.builtin.set_fact:
+        latest_release: "{{ gh_latest.content | from_json }}"
+
+    - name: Extract .deb URL and version
+      ansible.builtin.set_fact:
+        deb_url: "{{ latest_release.platforms['linux-x86_64-deb'].url }}"
+        deb_version: "{{ latest_release.version }}"
+
+    - name: Show resolved .deb URL and version
+      ansible.builtin.debug:
+        msg: "Downloading petriktv v{{ deb_version }} from {{ deb_url }}"
+
+    - name: Download latest petriktv .deb
+      ansible.builtin.get_url:
+        url: "{{ deb_url }}"
+        dest: "{{ deb_download_dest }}"
+        mode: "0644"
+        force: true            # always re-download so upgrades work
+
+    # --------------------------------------------------------------------------
+    # 7. Install the .deb
+    # --------------------------------------------------------------------------
+    - name: Install petriktv .deb package
+      ansible.builtin.apt:
+        deb: "{{ deb_download_dest }}"
+        state: present
+
+    - name: Fix any broken dependencies after deb install
+      ansible.builtin.apt:
+        state: fixed
+      changed_when: false
+
+    - name: Verify kiosk binary exists after install
+      ansible.builtin.stat:
+        path: "{{ kiosk_binary }}"
+      register: binary_stat
+
+    - name: Fail if binary not found
+      ansible.builtin.fail:
+        msg: "{{ kiosk_binary }} was not found after package install — check the .deb contents."
+      when: not binary_stat.stat.exists
+
+    # --------------------------------------------------------------------------
+    # 8. systemd user service (alternative / more robust launch method)
+    #    This service runs as the admin user and starts cage after login.
+    #    It complements the .bash_profile approach; disable one if redundant.
+    # --------------------------------------------------------------------------
+    - name: Create systemd user service directory for admin
+      ansible.builtin.file:
+        path: "/home/{{ kiosk_user }}/.config/systemd/user"
+        state: directory
+        owner: "{{ kiosk_user }}"
+        group: "{{ kiosk_user }}"
+        mode: "0755"
+
+    - name: Write petriktv-kiosk systemd user service
+      ansible.builtin.copy:
+        dest: "/home/{{ kiosk_user }}/.config/systemd/user/petriktv-kiosk.service"
+        owner: "{{ kiosk_user }}"
+        group: "{{ kiosk_user }}"
+        mode: "0644"
+        content: |
+          [Unit]
+          Description=PetrikTV Kiosk Session (cage + petriktv)
+          After=default.target
+
+          [Service]
+          Type=simple
+          Environment=XDG_RUNTIME_DIR=/run/user/%U
+          ExecStart=/usr/bin/cage -- {{ kiosk_binary }}
+          Restart=always
+          RestartSec=3
+
+          [Install]
+          WantedBy=default.target
+
+    - name: Enable lingering for admin (keeps user services alive)
+      ansible.builtin.command: loginctl enable-linger {{ kiosk_user }}
+      args:
+        creates: "/var/lib/systemd/linger/{{ kiosk_user }}"
+
+    - name: Get admin user ID
+      ansible.builtin.getent:
+        database: passwd
+        key: "{{ kiosk_user }}"
+      register: getent_passwd
+
+    - debug:
+        var: getent_passwd
+
+    - name: Enable petriktv-kiosk user service
+      ansible.builtin.systemd:
+        name: petriktv-kiosk.service
+        enabled: true
+        scope: user
+      become: true
+      become_user: "{{ kiosk_user }}"
+      environment:
+        XDG_RUNTIME_DIR: "/run/user/{{ getent_passwd.ansible_facts.getent_passwd[kiosk_user][2] }}"
+
+    # --------------------------------------------------------------------------
+    # 9. Clean up downloaded .deb
+    # --------------------------------------------------------------------------
+    - name: Remove downloaded .deb file
+      ansible.builtin.file:
+        path: "{{ deb_download_dest }}"
+        state: absent
+
+  # ============================================================================
+  handlers:
+
+    - name: Restart sshd
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
